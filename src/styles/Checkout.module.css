@@ -1,0 +1,254 @@
+.main {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+h1 {
+  color: var(--secondary);
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+/* 🔹 FORMULARIO */
+.form {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.2rem;
+  font-weight: 500;
+  color: var(--secondary);
+}
+
+.form input,
+.form select {
+  padding: 0.7rem;
+  margin-top: 0.4rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.form input:focus,
+.form select:focus {
+  border-color: var(--primary);
+}
+
+/* 🔹 BOTÓN CONFIRMAR */
+.btnConfirmar {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.9rem 1.5rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.btnConfirmar:hover {
+  background-color: #0194a1;
+}
+
+/* 🔹 RESUMEN DE COMPRA */
+.resumen {
+  background: #f9f9f9;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.resumen h2 {
+  color: var(--secondary);
+  margin-bottom: 1rem;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+}
+
+.item span {
+  color: var(--secondary);
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+
+/* 🔹 PRODUCTOS Y ENVÍO */
+.producto {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem 0;
+}
+
+.envioTachado {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.entregaItem {
+  margin-top: 8px;
+}
+
+.entregaTexto {
+  font-weight: 500;
+  text-align: right;
+  color: #222;
+  max-width: 60%;
+  line-height: 1.4;
+}
+
+/* 🔹 INPUT DESHABILITADO (PAÍS) */
+.inputDisabled {
+  background-color: #f1f1f1;
+  color: #555;
+  border: 1px solid #ccc;
+  cursor: not-allowed;
+}
+
+/* 🔹 CORREO */
+.correoGroup {
+  margin-bottom: 1.2rem;
+  color: var(--secondary);
+  font-weight: 500;
+}
+
+.correoInputGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.correoInputGroup input {
+  flex: 1;
+  padding: 0.7rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.correoInputGroup select {
+  padding: 0.7rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: white;
+}
+
+.correoInputGroup input:focus,
+.correoInputGroup select:focus {
+  border-color: var(--primary);
+}
+
+/* 🔹 SELECTORES DE SEDE Y MÉTODO DE PAGO */
+.selectorSede {
+  margin-top: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.metodoPagoGroup {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--secondary);
+}
+
+.metodoPagoGroup h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+  color: var(--secondary);
+}
+
+.selectPago {
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  background-color: white;
+}
+
+.selectPago:focus {
+  border-color: var(--primary);
+}
+
+/* 🔹 GRUPO MÉTODO DE ENTREGA */
+.opcionesEntrega {
+  margin-top: 1.5rem;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.opcionesEntrega h3 {
+  margin-bottom: 0.8rem;
+  color: var(--secondary);
+  font-size: 1rem;
+}
+
+/* 🔹 RADIO PERSONALIZADO */
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+  font-weight: 500;
+  color: var(--secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.radioLabel input[type="radio"] {
+  display: none;
+}
+
+.radioLabel .radioTexto::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  margin-right: 8px;
+  vertical-align: middle;
+  transition: all 0.2s ease;
+}
+
+.radioLabel input[type="radio"]:checked + .radioTexto::before {
+  background-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(0, 171, 179, 0.2);
+  border-color: var(--primary);
+}
+
+.radioLabel:hover .radioTexto::before {
+  border-color: #0194a1;
+}
+
+/* 🔹 RESPONSIVE */
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,45 @@
+.footer {
+  background-color: #f9f9f9;
+  border-top: 2px solid var(--primary);
+  margin-top: 3rem;
+  padding: 2rem 0;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+h4 {
+  color: var(--secondary);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  color: var(--text);
+  font-size: 0.9rem;
+  margin: 0.3rem 0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+li:hover {
+  color: var(--primary);
+}
+
+.copy {
+  text-align: center;
+  color: #777;
+  margin-top: 2rem;
+  font-size: 0.85rem;
+}

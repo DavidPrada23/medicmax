@@ -1,0 +1,24 @@
+:root {
+  --primary: #007c89;
+  --secondary: #0a2a3a;
+  --background: #f6f7f8;
+  --text: #222;
+  --font-main: "Inter", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}

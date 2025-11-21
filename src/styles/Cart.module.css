@@ -1,0 +1,137 @@
+.main {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+h1 {
+  color: var(--secondary);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.carrito {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.tabla th {
+  background-color: var(--primary);
+  color: white;
+  text-align: left;
+  padding: 1rem;
+  font-size: 0.9rem;
+}
+
+.tabla td {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.controles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.controles button {
+  background-color: #eee;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.controles button:hover {
+  background-color: #ddd;
+}
+
+.eliminar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.resumen {
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-width: 350px;
+  align-self: flex-end;
+}
+
+.resumen h2 {
+  color: var(--secondary);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.linea {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+hr {
+  margin: 1rem 0;
+  border: 0;
+  border-top: 1px solid #ddd;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.btnPagar {
+  background-color: var(--primary);
+  color: white;
+  width: 100%;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btnPagar:hover {
+  background-color: #0194a1;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .carrito {
+    flex-direction: column;
+  }
+
+  .tabla th,
+  .tabla td {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .resumen {
+    width: 100%;
+    align-self: center;
+  }
+}

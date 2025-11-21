@@ -1,0 +1,250 @@
+.main {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.container {
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.imagen {
+  width: 320px;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.info h1 {
+  font-size: 2rem;
+  color: var(--secondary);
+  margin-bottom: 0.5rem;
+}
+
+.descripcion {
+  color: #444;
+  margin-bottom: 1.5rem;
+}
+
+.uso h3 {
+  font-size: 1.1rem;
+  color: var(--secondary);
+  margin-bottom: 0.3rem;
+}
+
+.uso p {
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.precio {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+}
+
+.botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btnAgregar {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btnAgregar:hover {
+  background-color: #0194a1;
+}
+
+.btnGuardar {
+  background-color: #eee;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  color: var(--primary);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btnGuardar:hover {
+  background-color: #ddd;
+}
+
+/* 🔹 Productos relacionados */
+.relacionados {
+  margin-top: 4rem;
+  text-align: center;
+}
+
+.relacionados h2 {
+  color: var(--secondary);
+  margin-bottom: 1.5rem;
+}
+
+.gridRelacionados {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 0 1rem;
+}
+
+.cardRelacionado {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.cardRelacionado:hover {
+  transform: scale(1.03);
+}
+
+.cardRelacionado img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.cardRelacionado h4 {
+  color: var(--secondary);
+  margin-bottom: 0.3rem;
+}
+
+.cardRelacionado p {
+  color: var(--primary);
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+/* Botón agregar */
+.btnAgregar {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.7rem 1.3rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btnAgregar:hover {
+  background-color: #007a70;
+}
+
+/* Botón volver */
+.btnVolver {
+  background-color: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 0.7rem 1.3rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnVolver:hover {
+  background-color: var(--primary);
+  color: white;
+  transform: scale(1.05);
+}
+
+/* 🔹 Contenedor de cantidad */
+.cantidadContainer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.2rem;
+  font-size: 1rem;
+}
+
+.controles {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.btnCantidad {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btnCantidad:hover {
+  background-color: #007a70;
+}
+
+.controles span {
+  font-weight: 600;
+  min-width: 24px;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+
+/* 🔹 Botones separados */
+.botones {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btnComprar {
+  background-color: #007b83;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.btnComprar:hover {
+  background-color: #0194a1;
+}
+
+.controles {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btnCantidad {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btnCantidad:hover {
+  background-color: #0194a1;
+}
