@@ -1,10 +1,24 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "../styles/Navbar.module.css";
 import logo from "../assets/logo_medicmax.jpeg";
 import { useCart } from "../context/CartContext";
+import { useEffect, useState } from "react";
+import { getCategorias } from "../services/api";
+import type { Categoria } from "../types/Categoria";
 
 export default function Navbar() {
   const { totalItems } = useCart();
+  const navigate = useNavigate();
+
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
+
+  useEffect(() => {
+    async function fetchCategorias() {
+        const cats = await getCategorias();
+        setCategorias(cats);
+    }
+    fetchCategorias();
+  }, []);
 
   return (
     <header className={styles.header}>
@@ -22,7 +36,7 @@ export default function Navbar() {
               {categorias.map((c) => (
                 <li
                   key={c.id}
-                  onClick={() => navigate(`/categoria/${c.id}`)}
+                  onClick={() => navigate(`/categoria/${c.slug}`)}
                   className={styles.dropdownItem}
                 >
                   {c.nombre}

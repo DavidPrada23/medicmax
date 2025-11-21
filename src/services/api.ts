@@ -1,7 +1,14 @@
-const API_URL = "http://.com/api";
+import type { PedidoRequest } from "../types/Pedido";
+
+const API_URL = "http://localhost:8081/api";
 
 export async function getCategorias() {
   const resp = await fetch(`${API_URL}/categorias`);
+  return resp.json();
+}
+
+export async function getCategoriasPorSlug(slug: string) {
+  const resp = await fetch(`${API_URL}/categorias/slug/${slug}`);
   return resp.json();
 }
 
@@ -15,7 +22,7 @@ export async function getProducto(id: number) {
   return resp.json();
 }
 
-export async function crearPedido(data: any, token: string) {
+export async function crearPedido(data: PedidoRequest, token: string) {
   const resp = await fetch(`${API_URL}/pedidos`, {
     method: "POST",
     headers: {
