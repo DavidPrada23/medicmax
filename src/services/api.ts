@@ -1,6 +1,6 @@
 import type { PedidoRequest } from "../types/Pedido";
 
-const API_URL = "http://localhost:8081/api";
+const API_URL = "http://localhost:8081";
 
 export async function getCategorias() {
   const resp = await fetch(`${API_URL}/categorias`);
@@ -21,6 +21,11 @@ export async function getProducto(id: number) {
   const resp = await fetch(`${API_URL}/productos/${id}`);
   return resp.json();
 }
+
+export async function buscarProductos(query: string) {
+    const resp = await fetch(`${API_URL}/productos/buscar?query=${encodeURIComponent(query)}`);
+    return resp.json();
+    }
 
 export async function crearPedido(data: PedidoRequest, token: string) {
   const resp = await fetch(`${API_URL}/pedidos`, {

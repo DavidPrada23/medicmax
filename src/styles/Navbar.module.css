@@ -111,3 +111,39 @@
 .dropdownItem:hover {
   background: #f0f0f0;
 }
+
+.searchWrapper {
+  position: relative;
+}
+
+.searchResults {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 250px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+.searchItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.searchItem:hover {
+  background: #f4f4f4;
+}
+
+.searchItem img {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  object-fit: cover;
+}
