@@ -34,7 +34,7 @@ export default function Home() {
   useEffect(() => {
     async function loadProductos() {
       const data = await getProductos();
-      setProductos(data.slice(0, 8)); // Mostrar solo los primeros 8 productos
+      setProductos(data.slice(0, 4)); // Mostrar solo los primeros 4 productos
       setLoading(false);
     }
     loadProductos();
