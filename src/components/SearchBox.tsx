@@ -1,0 +1,269 @@
+import React, { useEffect, useRef, useState } from "react";
+import styles from "../styles/SearchBox.module.css";
+import { buscarProductos, getCategorias } from "../services/api";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+
+type ProductoLite = {
+  id: number;
+  nombre: string;
+  precio: number;
+  imagen?: string;
+  categoriaSlug?: string;
+  categoriaNombre?: string;
+};
+
+export default function SearchBox() {
+  const navigate = useNavigate();
+  const { agregarAlCarrito } = useCart();
+
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
+  const [results, setResults] = useState<ProductoLite[]>([]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [highlightIndex, setHighlightIndex] = useState<number>(-1);
+  const [history, setHistory] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem("search_history_medicmax") || "[]");
+    } catch {
+      return [];
+    }
+  });
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const debounceRef = useRef<number | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    // Cerrar si clic fuera
+    function onClick(e: MouseEvent) {
+      if (!containerRef.current) return;
+      if (!containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+        setHighlightIndex(-1);
+      }
+    }
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
+
+  useEffect(() => {
+    // sugerencias por categorías (rápido)
+    async function loadCats() {
+      try {
+        const cats = await getCategorias();
+        const names = (cats || []).slice(0, 6).map((c: any) => c.nombre);
+        setSuggestions(names);
+      } catch {
+        // ignore
+      }
+    }
+    loadCats();
+  }, []);
+
+  // Debounce + búsqueda
+  useEffect(() => {
+    if (debounceRef.current) window.clearTimeout(debounceRef.current);
+    if (!query || query.length < 2) {
+      setResults([]);
+      setError(null);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    debounceRef.current = window.setTimeout(async () => {
+      try {
+        const data: any = await buscarProductos(query);
+        // data can be error object from backend
+        if (!Array.isArray(data)) {
+          setResults([]);
+          setError("No se pudieron obtener resultados.");
+        } else {
+          // map to ProductoLite
+          const mapped = data.map((p: any) => ({
+            id: p.id,
+            nombre: p.nombre,
+            precio: Number(p.precio || p.price || 0),
+            imagen: p.imagen || p.image || p.urlImagen || undefined,
+            categoriaSlug: p.categoria?.slug || p.categoriaSlug || undefined,
+            categoriaNombre: p.categoria?.nombre || p.categoriaNombre || undefined,
+          }));
+          setResults(mapped.slice(0, 8));
+          setError(null);
+        }
+      } catch (err) {
+        console.error(err);
+        setResults([]);
+        setError("No se pudo completar la búsqueda.");
+      } finally {
+        setLoading(false);
+      }
+    }, 300); // 300ms debounce
+    return () => {
+      if (debounceRef.current) window.clearTimeout(debounceRef.current);
+    };
+  }, [query]);
+
+  // keyboard navigation
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!open) setOpen(true);
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightIndex((i) => Math.min(i + 1, results.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightIndex((i) => Math.max(i - 1, 0));
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (highlightIndex >= 0 && results[highlightIndex]) {
+        goToProduct(results[highlightIndex]);
+      } else if (results.length === 1) {
+        goToProduct(results[0]);
+      } else {
+        // navegar a página de búsqueda completa
+        doFullSearch();
+      }
+    } else if (e.key === "Escape") {
+      setOpen(false);
+    }
+  };
+
+  const saveHistory = (q: string) => {
+    if (!q) return;
+    const h = [q, ...history.filter((x) => x !== q)].slice(0, 8);
+    setHistory(h);
+    localStorage.setItem("search_history_medicmax", JSON.stringify(h));
+  };
+
+  const goToProduct = (p: ProductoLite) => {
+    saveHistory(query);
+    setOpen(false);
+    setQuery("");
+    setResults([]);
+    navigate(`/producto/${p.id}`, { state: { producto: p } });
+  };
+
+  const doFullSearch = () => {
+    saveHistory(query);
+    navigate("/search", { state: { resultados: results, query } });
+    setOpen(false);
+    setQuery("");
+    setResults([]);
+  };
+
+  const addQuick = (p: ProductoLite, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    agregarAlCarrito({ id: p.id, nombre: p.nombre, descripcion: p.nombre, imagen: p.imagen || "", precio: p.precio, cantidad: 1 });
+  };
+
+  const highlight = (text: string, q: string) => {
+    if (!q) return text;
+    const idx = text.toLowerCase().indexOf(q.toLowerCase());
+    if (idx === -1) return text;
+    return (
+      <>
+        {text.slice(0, idx)}
+        <mark className={styles.hl}>{text.slice(idx, idx + q.length)}</mark>
+        {text.slice(idx + q.length)}
+      </>
+    );
+  };
+
+  return (
+    <div className={styles.wrapper} ref={containerRef}>
+      <div className={styles.inputWrap}>
+        <input
+          ref={inputRef}
+          className={styles.input}
+          placeholder="Buscar productos, marcas o síntomas..."
+          value={query}
+          onChange={(e) => { setQuery(e.target.value); setOpen(true); setHighlightIndex(-1); }}
+          onFocus={() => setOpen(true)}
+          onKeyDown={onKeyDown}
+          aria-label="buscar productos"
+        />
+        {query && (
+          <button className={styles.clearBtn} onClick={() => { setQuery(""); setResults([]); setOpen(false); }}>
+            ✕
+          </button>
+        )}
+      </div>
+
+      {open && (
+        <div className={styles.panel}>
+          {/* HISTORIAL Y SUGERENCIAS */}
+          {(!query || query.length < 2) && (
+            <>
+              {history.length > 0 && (
+                <div className={styles.section}>
+                  <div className={styles.sectionTitle}>Historial</div>
+                  <div className={styles.tags}>
+                    {history.map((h) => (
+                      <button key={h} className={styles.tag} onClick={() => { setQuery(h); setOpen(true); }}>
+                        {h}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className={styles.section}>
+                <div className={styles.sectionTitle}>Sugerencias</div>
+                <div className={styles.tags}>
+                  {suggestions.map((s) => (
+                    <button key={s} className={styles.tag} onClick={() => { setQuery(s); inputRef.current?.focus(); }}>
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* RESULTADOS */}
+          {query.length >= 2 && (
+            <>
+              <div className={styles.resultsTitle}>
+                {loading ? "Buscando..." : `${results.length} resultados`}
+                {error && <span className={styles.err}>{error}</span>}
+              </div>
+
+              <ul className={styles.resultsList}>
+                {results.length === 0 && !loading && !error && (
+                  <li className={styles.noFound}>No se encontraron productos para “{query}”</li>
+                )}
+
+                {results.map((p, idx) => (
+                  <li
+                    key={p.id}
+                    className={styles.resultItem + (idx === highlightIndex ? ` ${styles.active}` : "")}
+                    onMouseEnter={() => setHighlightIndex(idx)}
+                    onClick={() => goToProduct(p)}
+                  >
+                    <img src={p.imagen || "/placeholder-product.png"} alt={p.nombre} />
+                    <div className={styles.meta}>
+                      <div className={styles.name}>{highlight(p.nombre, query)}</div>
+                      <div className={styles.cat}>{p.categoriaNombre || p.categoriaSlug || ""}</div>
+                    </div>
+
+                    <div className={styles.actions}>
+                      <div className={styles.price}>${Number(p.precio).toLocaleString()}</div>
+                      <button className={styles.quickAdd} onClick={(e) => addQuick(p, e)}>+</button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              <div className={styles.footer}>
+                <button className={styles.viewAll} onClick={doFullSearch}>Ver todos los resultados</button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
