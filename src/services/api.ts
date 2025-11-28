@@ -51,3 +51,9 @@ export async function crearPedido(data: PedidoRequest, token: string) {
 
   return resp.json();
 }
+
+export async function getProductosPaginados(page = 0, size = 12) {
+  const resp = await fetch(`${API_URL}/productos/paginado?page=${page}&size=${size}`);
+  return resp.json();
+}
+

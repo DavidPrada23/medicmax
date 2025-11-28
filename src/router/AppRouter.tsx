@@ -6,6 +6,7 @@ import OrderConfirmation from "../pages/OrderConfirmation";
 import Checkout from "../pages/Checkout";
 import Categoria from "../pages/CategoriaPage";
 import Search from "../pages/SearchPage";
+import Catalogo from "../pages/CatalogoPage";
 
 export const AppRouter = () => {
   return (
@@ -16,7 +17,8 @@ export const AppRouter = () => {
       <Route path="/confirmation" element={<OrderConfirmation/>} />
       <Route path="/checkout" element={<Checkout/>} />
       <Route path="/categoria" element={<Categoria/>} />
-      <Route path="/searhch" element={<Search/>} />
+      <Route path="/searh" element={<Search/>} />
+      <Route path="/catalogo" element={<Catalogo/>} />
     </Routes>
   );
 };
