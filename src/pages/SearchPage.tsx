@@ -1,44 +1,49 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "../styles/SearchPage.module.css";
+import { useCart } from "../context/CartContext";
 
 export default function SearchPage() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { resultados = [], query = "" } = location.state || {};
+  const { resultados = [], query = "" } = useLocation().state || {};
+  const { agregarAlCarrito } = useCart();
+
+  const goToProduct = (p: any) => navigate(`/producto/${p.id}`, { state: { producto: p } });
+
+  if (resultados.length === 0) {
+    return (
+      <div className={styles.container}>
+        <h2>
+          Resultados para: <span>"{query}"</span>
+        </h2>
+        <p className={styles.noResults}>No se encontraron productos.</p>
+      </div>
+    );
+  }
+
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>
-        Resultados para: <span>"{query}"</span>
-      </h2>
-
-      {/* Si no hay resultados */}
-      {resultados.length === 0 && (
-        <p className={styles.noResults}>No se encontraron productos.</p>
-      )}
+      <h2>Resultados para: <span>"{query}"</span></h2>
 
       <div className={styles.grid}>
         {resultados.map((p: any) => (
-          <div
-            key={p.id}
-            className={styles.card}
-            onClick={() =>
-              navigate(`/producto/${p.id}`, { state: { producto: p } })
-            }
-          >
-            <div className={styles.imageContainer}>
-              <img
-                src={p.imagen || "https://via.placeholder.com/200"}
-                alt={p.nombre}
-              />
+          <article key={p.id} className={styles.card}>
+            <div className={styles.imgWrap} onClick={() => goToProduct(p)}>
+              <img src={p.imagen || "/placeholder-product.png"} alt={p.nombre} />
             </div>
 
             <div className={styles.info}>
-              <h3>{p.nombre}</h3>
-              <p className={styles.price}>${p.precio.toLocaleString()}</p>
-              <button className={styles.button}>Ver producto</button>
+              <h3 className={styles.name}>{p.nombre}</h3>
+              <p className={styles.cat}>{p.categoriaNombre || p.categoriaSlug || ""}</p>
+              <div className={styles.row}>
+                <div className={styles.price}>${Number(p.precio).toLocaleString()}</div>
+                <div className={styles.actions}>
+                  <button className={styles.btnPrimary} onClick={() => goToProduct(p)}>Ver</button>
+                  <button className={styles.btnGhost} onClick={() => agregarAlCarrito({...p, cantidad:1})}>Agregar</button>
+                </div>
+              </div>
             </div>
-          </div>
+          </article>
         ))}
       </div>
     </div>
