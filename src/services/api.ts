@@ -17,15 +17,27 @@ export async function getProductosPorCategoria(slug: string) {
   return resp.json();
 }
 
-export async function getProducto(id: number) {
-  const resp = await fetch(`${API_URL}/productos/${id}`);
+export async function getProductos() {
+  const resp = await fetch(`${API_URL}/productos`);
+  if (!resp.ok) {
+    console.error("Error al cargar productos");
+    return [];
+  }
   return resp.json();
 }
 
 export async function buscarProductos(query: string) {
-    const resp = await fetch(`${API_URL}/productos/buscar?query=${encodeURIComponent(query)}`);
-    return resp.json();
-    }
+  const resp = await fetch(`${API_URL}/productos/buscar?query=${encodeURIComponent(query)}`);
+  if (!resp.ok) {
+    // intenta parsear error y convertir a mensaje
+    try {
+      const err = await resp.json();
+      console.error("Error backend:", err);
+    } catch {}
+    throw new Error("Error en el servidor");
+  }
+  return resp.json();
+}
 
 export async function crearPedido(data: PedidoRequest, token: string) {
   const resp = await fetch(`${API_URL}/pedidos`, {

@@ -193,3 +193,23 @@
   color: white;
   transform: scale(1.05);
 }
+
+.verMasContainer {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.btnVerMas {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.btnVerMas:hover {
+  background-color: #0194a1;
+}
