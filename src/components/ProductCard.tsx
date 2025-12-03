@@ -2,14 +2,7 @@ import styles from "../styles/Home.module.css";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-
-interface Producto {
-  id: number;
-  nombre: string;
-  descripcion: string;
-  imagen: string;
-  precio: string;
-}
+import type { Producto } from "../types/Producto";
 
 export default function ProductCard({ producto }: { producto: Producto }) {
   const { agregarAlCarrito } = useCart();
@@ -19,12 +12,8 @@ export default function ProductCard({ producto }: { producto: Producto }) {
   const handleAgregar = (e: React.MouseEvent) => {
     e.stopPropagation();
     agregarAlCarrito({
-      id: producto.id,
-      nombre: producto.nombre,
-      descripcion: producto.descripcion,
-      imagen: producto.imagen,
-      precio: parseFloat(producto.precio.replace(/\./g, "")),
-      cantidad,
+      ...producto,
+        cantidad,
     });
   };
   const { reemplazarCantidad } = useCart();
@@ -32,12 +21,7 @@ export default function ProductCard({ producto }: { producto: Producto }) {
   const handleComprarAhora = (e: React.MouseEvent) => {
     e.stopPropagation();
     reemplazarCantidad({
-        id: producto.id,
-        nombre: producto.nombre,
-        descripcion: producto.descripcion,
-        imagen: producto.imagen,
-        precio: parseFloat(producto.precio.replace(/\./g, "")),
-        cantidad,
+        ...producto, cantidad
     });
     navigate("/checkout", {
         state: {

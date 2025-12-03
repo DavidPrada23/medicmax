@@ -2,7 +2,7 @@ import { getProductosPorCategoria, getCategoriasPorSlug } from "../services/api"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import type { Categoria } from "../types/Categoria";
-import type { Producto } from "../types/index";
+import type { Producto } from "../types/Producto";
 
 export default function CategoriaPage() {
   const { id } = useParams(); // slug recibido por URL

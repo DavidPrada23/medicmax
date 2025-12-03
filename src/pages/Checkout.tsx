@@ -5,13 +5,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useState } from "react";
 import LoadingScreen from "../components/LoadingScreen";
-import type { Producto } from "../types";
+import type { Producto } from "../types/Producto";
 
 export default function Checkout() {
   const navigate = useNavigate();
   const { carrito, totalItems } = useCart();
   const location = useLocation();
-  const productosCheckout: Producto[] = location.state?.productosCheckout || carrito;
+  const productosCheckout: Producto[] =
+    location.state?.productosCheckout || carrito;
   const [loading, setLoading] = useState(false);
   const [sede, setSede] = useState("");
   const [tipoEntrega, setTipoEntrega] = useState("envio");
@@ -22,9 +23,10 @@ export default function Checkout() {
   ];
 
   const subtotal = productosCheckout.reduce(
-    (total: number, p: { cantidad: number; precio: number}) => total + p.cantidad * p.precio,
+    (total: number, p: Producto) => total + (p.cantidad ?? 1) * p.precio,
     0
   );
+
   const envio = 2000;
   const impuestos = Math.round(subtotal * 0.19);
   const total =

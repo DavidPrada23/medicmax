@@ -3,13 +3,16 @@ import Footer from "../components/Footer";
 import ProductCard from "../components/ProductCard";
 import CategoryCard from "../components/CategoryCard";
 import styles from "../styles/Home.module.css";
+import { useNavigate } from "react-router-dom";
 
 import { useEffect, useState } from "react";
 import { getProductos } from "../services/api";
+import type { Producto } from "../types/Producto";
 
 export default function Home() {
-  const [productos, setProductos] = useState<any[]>([]);
+  const [productos, setProductos] = useState<Producto[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   const categorias = [
     {
       id: 1,

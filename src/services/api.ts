@@ -27,17 +27,25 @@ export async function getProductos() {
 }
 
 export async function buscarProductos(query: string) {
-  const resp = await fetch(`${API_URL}/productos/buscar?query=${encodeURIComponent(query)}`);
-  if (!resp.ok) {
-    // intenta parsear error y convertir a mensaje
-    try {
-      const err = await resp.json();
-      console.error("Error backend:", err);
-    } catch {}
-    throw new Error("Error en el servidor");
+  try {
+    const resp = await fetch(
+      `${API_URL}/productos/buscar?query=${encodeURIComponent(query)}`
+    );
+
+    if (!resp.ok) {
+      const backendError = await resp.json().catch(() => ({}));
+      console.error("Error backend:", backendError);
+
+      return []; // devolver vacío para no romper el frontend
+    }
+
+    return resp.json();
+  } catch (error) {
+    console.error("Error de conexión:", error);
+    return [];
   }
-  return resp.json();
 }
+
 
 export async function crearPedido(data: PedidoRequest, token: string) {
   const resp = await fetch(`${API_URL}/pedidos`, {
@@ -54,6 +62,18 @@ export async function crearPedido(data: PedidoRequest, token: string) {
 
 export async function getProductosPaginados(page = 0, size = 12) {
   const resp = await fetch(`${API_URL}/productos/paginado?page=${page}&size=${size}`);
+  return resp.json();
+}
+
+export async function getProducto(id: string | number) {
+  const resp = await fetch(`${API_URL}/productos/${id}`);
+  if (!resp.ok) throw new Error("Producto no encontrado");
+  return resp.json();
+}
+
+export async function getRelacionados(id: string | number) {
+  const resp = await fetch(`${API_URL}/productos/${id}/relacionados`);
+  if (!resp.ok) return [];
   return resp.json();
 }
 

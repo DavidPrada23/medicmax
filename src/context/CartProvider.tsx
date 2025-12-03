@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { CartContext } from "./CartContext";
 import type { ReactNode } from "react";
-import type { Producto } from "../types";
+import type { Producto } from "../types/Producto";
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [carrito, setCarrito] = useState<Producto[]>(() => {
@@ -14,19 +14,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("carritoMedicMax", JSON.stringify(carrito));
   }, [carrito]);
 
-  const agregarAlCarrito = (producto: Producto) => {
-    setCarrito((prev) => {
-      const existente = prev.find((p) => p.id === producto.id);
-      if (existente) {
-        return prev.map((p) =>
-          p.id === producto.id
-            ? { ...p, cantidad: p.cantidad + producto.cantidad }
-            : p
-        );
-      }
-      return [...prev, producto];
-    });
-  };
+  const agregarAlCarrito = (p: Producto) => {
+  const existing = carrito.find((item) => item.id === p.id);
+
+  if (existing) {
+    setCarrito(
+      carrito.map((item) =>
+        item.id === p.id
+          ? { ...item, cantidad: item.cantidad + (p.cantidad ?? 1) }
+          : item
+      )
+    );
+  } else {
+    setCarrito([...carrito, { ...p, cantidad: p.cantidad ?? 1 } as CartItem]);
+  }
+};
 
   const eliminarDelCarrito = (id: number) => {
     setCarrito((prev) => prev.filter((p) => p.id !== id));
