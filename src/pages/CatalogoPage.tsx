@@ -4,9 +4,10 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProductCard from "../components/ProductCard";
 import styles from "../styles/Catalogo.module.css";
+import type { Producto } from "../types/Producto";
 
 export default function CatalogoPage() {
-  const [productos, setProductos] = useState<any[]>([]);
+  const [productos, setProductos] = useState<Producto[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
 
@@ -36,7 +37,7 @@ export default function CatalogoPage() {
         ) : (
           <>
             <div className={styles.grid}>
-              {productos.map((p) => (
+              {productos.length > 0 && productos.map((p) => (
                 <ProductCard key={p.id} producto={p} />
               ))}
             </div>

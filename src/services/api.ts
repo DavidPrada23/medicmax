@@ -62,6 +62,10 @@ export async function crearPedido(data: PedidoRequest, token: string) {
 
 export async function getProductosPaginados(page = 0, size = 12) {
   const resp = await fetch(`${API_URL}/productos/paginado?page=${page}&size=${size}`);
+  if (!resp.ok) {
+    console.error("Error backend:", await resp.text());
+    throw new Error("Error al cargar productos paginados");
+  }
   return resp.json();
 }
 
