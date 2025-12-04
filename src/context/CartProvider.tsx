@@ -1,13 +1,12 @@
-// src/context/CartProvider.tsx
 import { useState, useEffect } from "react";
 import { CartContext } from "./CartContext";
 import type { ReactNode } from "react";
-import type { Producto } from "../types/Producto";
+import type { CartItem, Producto } from "../types/Producto";
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [carrito, setCarrito] = useState<Producto[]>(() => {
+  const [carrito, setCarrito] = useState<CartItem[]>(() => {
     const guardado = localStorage.getItem("carritoMedicMax");
-    return guardado ? JSON.parse(guardado) as Producto[] : [];
+    return guardado ? JSON.parse(guardado) as CartItem[] : [];
   });
 
   useEffect(() => {
@@ -15,6 +14,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [carrito]);
 
   const agregarAlCarrito = (p: Producto) => {
+    const cantidad = p.cantidad ?? 1;
   const existing = carrito.find((item) => item.id === p.id);
 
   if (existing) {
@@ -26,7 +26,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       )
     );
   } else {
-    setCarrito([...carrito, { ...p, cantidad: p.cantidad ?? 1 } as CartItem]);
+    const nuevoItem: CartItem = { ...p, cantidad };
+    setCarrito([ ...carrito, nuevoItem ]);
   }
 };
 
@@ -43,15 +44,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const reemplazarCantidad = (producto: Producto) => {
-    setCarrito((prev) => {
-      const existe = prev.find((p) => p.id === producto.id);
-      if (existe) {
-        return prev.map((p) =>
-          p.id === producto.id ? { ...p, cantidad: producto.cantidad } : p
-        );
-      }
-      return [...prev, producto];
-    });
+    const cantidad = producto.cantidad ?? 1;
+    const nuevo: CartItem = { ...producto, cantidad };
+    setCarrito([nuevo]);
   };
 
   const totalItems = carrito.reduce((acc, p) => acc + p.cantidad, 0);
