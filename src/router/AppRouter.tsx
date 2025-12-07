@@ -16,7 +16,7 @@ export const AppRouter = () => {
       <Route path="/product/:id" element={<ProductDetail/>} />
       <Route path="/confirmation" element={<OrderConfirmation/>} />
       <Route path="/checkout" element={<Checkout/>} />
-      <Route path="/categoria" element={<Categoria/>} />
+      <Route path="/categoria/:slug" element={<Categoria/>} />
       <Route path="/searh" element={<Search/>} />
       <Route path="/catalogo" element={<Catalogo/>} />
     </Routes>

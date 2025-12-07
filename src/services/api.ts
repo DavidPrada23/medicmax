@@ -2,6 +2,17 @@ import type { PedidoRequest } from "../types/Pedido";
 
 const API_URL = "http://localhost:8081";
 
+// Tipado para filtros
+export interface ProductosFiltradosParams {
+  categoria?: string;
+  marca?: string;
+  min?: string | number;
+  max?: string | number;
+  page?: number;
+  size?: number;
+  query?: string;
+}
+
 export async function getCategorias() {
   const resp = await fetch(`${API_URL}/categorias`);
   return resp.json();
@@ -80,4 +91,35 @@ export async function getRelacionados(id: string | number) {
   if (!resp.ok) return [];
   return resp.json();
 }
+
+export async function getProductosFiltrados(filtros: ProductosFiltradosParams) {
+  const params = new URLSearchParams();
+
+  if (filtros.categoria) params.append("categoria", String(filtros.categoria));
+  if (filtros.marca) params.append("marca", String(filtros.marca));
+  if (filtros.min !== undefined && filtros.min !== "") params.append("min", String(filtros.min));
+  if (filtros.max !== undefined && filtros.max !== "") params.append("max", String(filtros.max));
+  params.append("page", String(filtros.page ?? 0));
+  params.append("size", String(filtros.size ?? 12));
+
+  // opcional: query de búsqueda
+  if (filtros.query) params.append("query", String(filtros.query));
+
+  const url = `${API_URL}/productos/filtro?${params.toString()}`;
+  const resp = await fetch(url);
+
+  if (!resp.ok) {
+    // registra y lanza el error con mensaje legible
+    try {
+      const err = await resp.json();
+      console.error("Error backend filtros:", err);
+    } catch {
+      console.error("Error desconocido al cargar productos filtrados");
+    }
+    throw new Error("Error al cargar productos filtrados");
+  }
+
+  return resp.json();
+}
+
 
