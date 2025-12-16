@@ -21,10 +21,10 @@ export default function CatalogoPage() {
     () => ({
       categoria: searchParams.get("categoria") || undefined,
       marca: searchParams.get("marca") || undefined,
-      minPrecio: searchParams.get("min")
+      min: searchParams.get("min")
         ? Number(searchParams.get("min"))
         : undefined,
-      maxPrecio: searchParams.get("max")
+      max: searchParams.get("max")
         ? Number(searchParams.get("max"))
         : undefined,
       query: searchParams.get("query") || undefined,

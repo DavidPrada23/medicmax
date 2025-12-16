@@ -9,6 +9,17 @@ import { useEffect, useState } from "react";
 import { getProductos } from "../services/api";
 import type { Producto } from "../types/Producto";
 
+const IMAGENES_DESTACADAS = [
+  "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=60",
+  "https://images.unsplash.com/photo-1580281658629-47d4105f2155?auto=format&fit=crop&w=600&q=60",
+  "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?auto=format&fit=crop&w=600&q=60",
+  "https://images.unsplash.com/photo-1513224502586-d1e602410265?auto=format&fit=crop&w=600&q=60",
+  "https://images.unsplash.com/photo-1584982751631-5e85c66bd72d?auto=format&fit=crop&w=600&q=60",
+  "https://images.unsplash.com/photo-1516726817505-f5ed825624d8?auto=format&fit=crop&w=600&q=60",
+  "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=600&q=60",
+  "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=600&q=60",
+];
+
 export default function Home() {
   const [productos, setProductos] = useState<Producto[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +48,13 @@ export default function Home() {
   useEffect(() => {
     async function loadProductos() {
       const data = await getProductos();
-      setProductos(data.slice(0, 4)); // Mostrar solo los primeros 4 productos
+      const destacados = data.slice(0, 8).map((producto: Producto, index: number) => ({
+        ...producto,
+        imagen:
+          producto.imagen ||
+          IMAGENES_DESTACADAS[index % IMAGENES_DESTACADAS.length],
+      }));
+      setProductos(destacados);
       setLoading(false);
     }
     loadProductos();

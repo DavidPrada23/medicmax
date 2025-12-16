@@ -7,6 +7,8 @@ import Checkout from "../pages/Checkout";
 import Categoria from "../pages/CategoriaPage";
 import Search from "../pages/SearchPage";
 import Catalogo from "../pages/CatalogoPage";
+import Ofertas from "../pages/OfertasPage";
+import Contacto from "../pages/ContactoPage";
 
 export const AppRouter = () => {
   return (
@@ -19,6 +21,8 @@ export const AppRouter = () => {
       <Route path="/categoria/:slug" element={<Categoria/>} />
       <Route path="/searh" element={<Search/>} />
       <Route path="/catalogo" element={<Catalogo/>} />
+      <Route path="/ofertas" element={<Ofertas/>} />
+      <Route path="/contacto" element={<Contacto/>} />
     </Routes>
   );
 };

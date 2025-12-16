@@ -30,9 +30,14 @@ export default function Navbar() {
         </Link>
 
         <nav className={styles.nav}>
-          <Link to="/">Inicio</Link>
-          <li className={styles.dropdown}>
-            Categorías
+          <Link to="/" className={styles.navLink}>
+            Inicio
+          </Link>
+          <div className={styles.dropdown}>
+            <button type="button" className={styles.dropdownToggle}>
+              Categorías
+              <span className={styles.caret}>▾</span>
+            </button>
             <ul className={styles.dropdownMenu}>
               {categorias.map((c) => (
                 <li
@@ -44,10 +49,14 @@ export default function Navbar() {
                 </li>
               ))}
             </ul>
-          </li>
+          </div>
 
-          <Link to="#">Ofertas</Link>
-          <Link to="#">Contacto</Link>
+          <Link to="/ofertas" className={styles.navLink}>
+            Ofertas
+          </Link>
+          <Link to="/contacto" className={styles.navLink}>
+            Contacto
+          </Link>
         </nav>
         <div className={styles.searchWrapper}>
           <SearchBox />

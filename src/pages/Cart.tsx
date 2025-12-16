@@ -9,7 +9,7 @@ export default function Cart() {
   const navigate = useNavigate();
 
   const subtotal = carrito.reduce(
-    (total, p) => total + p.cantidad * p.precio,
+    (total, p) => total + (p.cantidad ?? 1) * p.precio,
     0
   );
   const envio = 5000;
@@ -37,32 +37,35 @@ export default function Cart() {
                 </tr>
               </thead>
               <tbody>
-                {carrito.map((p) => (
-                  <tr key={p.id}>
-                    <td>{p.nombre}</td>
-                    <td>
-                      <div className={styles.controles}>
-                        <button onClick={() => actualizarCantidad(p.id, -1)}>
-                          -
+                {carrito.map((p) => {
+                  const cantidad = p.cantidad ?? 1;
+                  return (
+                    <tr key={p.id}>
+                      <td>{p.nombre}</td>
+                      <td>
+                        <div className={styles.controles}>
+                          <button onClick={() => actualizarCantidad(p.id, -1)}>
+                            -
+                          </button>
+                          <span>{cantidad}</span>
+                          <button onClick={() => actualizarCantidad(p.id, 1)}>
+                            +
+                          </button>
+                        </div>
+                      </td>
+                      <td>${p.precio.toLocaleString()}</td>
+                      <td>${(p.precio * cantidad).toLocaleString()}</td>
+                      <td>
+                        <button
+                          className={styles.eliminar}
+                          onClick={() => eliminarDelCarrito(p.id)}
+                        >
+                          🗑️
                         </button>
-                        <span>{p.cantidad}</span>
-                        <button onClick={() => actualizarCantidad(p.id, 1)}>
-                          +
-                        </button>
-                      </div>
-                    </td>
-                    <td>${p.precio.toLocaleString()}</td>
-                    <td>${(p.precio * p.cantidad).toLocaleString()}</td>
-                    <td>
-                      <button
-                        className={styles.eliminar}
-                        onClick={() => eliminarDelCarrito(p.id)}
-                      >
-                        🗑️
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
 

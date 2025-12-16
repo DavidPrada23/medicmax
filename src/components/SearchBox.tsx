@@ -156,7 +156,16 @@ export default function SearchBox() {
 
   const addQuick = (p: ProductoLite, e?: React.MouseEvent) => {
     e?.stopPropagation();
-    agregarAlCarrito({ id: p.id, nombre: p.nombre, descripcion: p.nombre, imagen: p.imagen || "", precio: p.precio, cantidad: 1 });
+    agregarAlCarrito({
+      id: p.id,
+      nombre: p.nombre,
+      descripcion: p.nombre,
+      imagen: p.imagen || "",
+      precio: p.precio,
+      cantidad: 1,
+      stock: 1,
+      marca: p.categoriaNombre || "MedicMax",
+    });
   };
 
   const highlight = (text: string, q: string) => {

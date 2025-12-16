@@ -247,14 +247,17 @@ export default function Checkout() {
               <p>No hay productos en el carrito.</p>
             ) : (
               <>
-                {productosCheckout.map((p: Producto) => (
-                  <div key={p.id} className={styles.item}>
-                    <span>
-                      {p.nombre} x{p.cantidad}
-                    </span>
-                    <span>${(p.precio * p.cantidad).toLocaleString()}</span>
-                  </div>
-                ))}
+                {productosCheckout.map((p: Producto) => {
+                  const cantidad = p.cantidad ?? 1;
+                  return (
+                    <div key={p.id} className={styles.item}>
+                      <span>
+                        {p.nombre} x{cantidad}
+                      </span>
+                      <span>${(p.precio * cantidad).toLocaleString()}</span>
+                    </div>
+                  );
+                })}
                 <hr />
                 <div className={styles.item}>
                   <span>Subtotal</span>
