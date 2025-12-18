@@ -27,8 +27,8 @@ export default function Home() {
   const categorias = [
     {
       id: 1,
-      nombre: "Medicamentos",
-      slug: "medicamentos",
+      nombre: "Analgesicos y Antiinflamatorios",
+      slug: "analgesicos-y-antiinflamatorios",
       imagen:
         "https://lh3.googleusercontent.com/aida-public/AB6AXuC4iuiWkUzddLOzJ50-9-brW9Vet3L0iOJBXA-Ox1weEkBN7ALHeqBm7TSCbORdoSZFfS6r1A4ksSEsmzH67GHGkeUABKt_9y-G5klBMA93UsWxsukmchgm55FzQmFcPNre9m4SIyK0PE-FjWrfVVW-NIV8zhB6Nn_uQpsi7iHoTio6KO639zxU7PvX30N1VbmFG0deNj8mRJ31bCFdYJ093uRJjDwrM5SI6jQFDvapD5XNvX0gpsl-DTHYw6P9o35HIV3w5U_R1A",
     },

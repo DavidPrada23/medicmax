@@ -15,7 +15,9 @@ export default function ProductDetail() {
 
   const productoState = location.state?.producto as Producto | undefined;
 
-  const [producto, setProducto] = useState<Producto | null>(productoState || null);
+  const [producto, setProducto] = useState<Producto | null>(
+    productoState || null
+  );
   const [relacionados, setRelacionados] = useState<Producto[]>([]);
   const [cantidad, setCantidad] = useState(1);
   const [loading, setLoading] = useState(!productoState);
@@ -79,9 +81,7 @@ export default function ProductDetail() {
           <div className={styles.info}>
             <h1>{producto.nombre}</h1>
             <p className={styles.descripcion}>{producto.descripcion}</p>
-            <p className={styles.precio}>
-              ${producto.precio.toLocaleString()}
-            </p>
+            <p className={styles.precio}>${producto.precio.toLocaleString()}</p>
 
             <div className={styles.cantidadContainer}>
               <label>Cantidad:</label>
@@ -106,7 +106,10 @@ export default function ProductDetail() {
               <button className={styles.btnAgregar} onClick={handleAgregar}>
                 Agregar al carrito
               </button>
-              <button className={styles.btnComprar} onClick={handleComprarAhora}>
+              <button
+                className={styles.btnComprar}
+                onClick={handleComprarAhora}
+              >
                 Comprar ahora
               </button>
               <button className={styles.btnVolver} onClick={() => navigate(-1)}>
@@ -125,9 +128,14 @@ export default function ProductDetail() {
                 <div
                   key={p.id}
                   className={styles.cardRelacionado}
-                  onClick={() => navigate(`/productos/${p.id}`, { state: { producto: p } })}
+                  onClick={() =>
+                    navigate(`/product/${p.id}`, { state: { producto: p } })
+                  }
                 >
-                  <img src={p.imagen || "/placeholder-product.png"} alt={p.nombre} />
+                  <img
+                    src={p.imagen || "/placeholder-product.png"}
+                    alt={p.nombre}
+                  />
                   <h4>{p.nombre}</h4>
                   <p>${p.precio.toLocaleString()}</p>
 
@@ -139,6 +147,12 @@ export default function ProductDetail() {
                     }}
                   >
                     Agregar al carrito
+                  </button>
+                  <button
+                    className={styles.btnComprar}
+                    onClick={handleComprarAhora}
+                  >
+                    Comprar ahora
                   </button>
                 </div>
               ))}
