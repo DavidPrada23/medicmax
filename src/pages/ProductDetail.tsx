@@ -6,6 +6,7 @@ import { useCart } from "../context/CartContext";
 import { useEffect, useState } from "react";
 import type { Producto } from "../types/Producto";
 import { getProducto, getRelacionados } from "../services/api";
+import FloatingWhatsApp from "../components/FloatingWhatsApp";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -51,7 +52,18 @@ export default function ProductDetail() {
     fetchRelacionados();
   }, [id]);
 
-  if (loading || !producto) return <p>Cargando producto...</p>;
+  if (loading || !producto) {
+    return (
+      <>
+        <Navbar />
+        <main className={styles.main}>
+          <p>Cargando producto...</p>
+        </main>
+        <Footer />
+        <FloatingWhatsApp />
+      </>
+    );
+  }
 
   const handleAgregar = () => {
     agregarAlCarrito({ ...producto, cantidad });
@@ -161,6 +173,7 @@ export default function ProductDetail() {
         )}
       </main>
       <Footer />
+      <FloatingWhatsApp />
     </>
   );
 }

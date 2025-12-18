@@ -2,6 +2,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProductCard from "../components/ProductCard";
 import CategoryCard from "../components/CategoryCard";
+import FloatingWhatsApp from "../components/FloatingWhatsApp";
 import styles from "../styles/Home.module.css";
 import { useNavigate } from "react-router-dom";
 
@@ -108,6 +109,7 @@ export default function Home() {
       </main>
 
       <Footer />
+      <FloatingWhatsApp />
     </>
   );
 }
