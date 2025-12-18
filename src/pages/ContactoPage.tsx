@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 import styles from "../styles/Contacto.module.css";
 
 export default function ContactoPage() {
-  const [form, setForm] = useState({ nombre: "", email: "", mensaje: "" });
+  const [form, setForm] = useState({ nombre: "", telefono: "", mensaje: "" });
   const [enviado, setEnviado] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -15,7 +15,7 @@ export default function ContactoPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const numeroWhatsApp = "573053022867";
-    const texto = `Hola, soy ${form.nombre} (${form.email}). ${form.mensaje}`;
+    const texto = `Hola, soy ${form.nombre} (${form.telefono}). ${form.mensaje}`;
     const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(texto)}`;
     window.open(url, "_blank");
     setEnviado(true);
@@ -50,15 +50,15 @@ export default function ContactoPage() {
 
         <section className={styles.section}>
           <div className={styles.formContainer}>
-            <h2>Envíanos un mensaje</h2>
+            <h2>Envíanos un mensaje al WhatsApp</h2>
             <form onSubmit={handleSubmit}>
               <label>
                 Nombre
                 <input name="nombre" value={form.nombre} onChange={handleChange} required />
               </label>
               <label>
-                Correo
-                <input type="email" name="email" value={form.email} onChange={handleChange} required />
+                Teléfono
+                <input type="telefono" name="telefono" value={form.telefono} onChange={handleChange} required />
               </label>
               <label>
                 Mensaje
@@ -70,11 +70,26 @@ export default function ContactoPage() {
           </div>
 
           <div className={styles.mapa}>
-            <iframe
-              title="Ubicación MedicMax"
-              src="https://www.google.com/maps/place/Droguer%C3%ADa+MedicMax/@4.710989,-74.0720923,15z/data=!4m5!3m4!1s0x0:0x8f3c1e2f3e6f4e0!8m2!3d4.710989!4d-74.0720923"
-              loading="lazy"
-            ></iframe>
+            <h2>Nuestras sedes</h2>
+            <div className={styles.mapGrid}>
+              <div className={styles.mapCard}>
+                <h3>Sabaneta</h3>
+                <iframe
+                  title="Sede Sabaneta"
+                  src="https://www.google.com/maps/place/DROGUERIA+MEDICMAX/@6.1519784,-75.6117814,17z/data=!3m1!4b1!4m6!3m5!1s0x8e468350c92f869f:0xbfd1e3d7f59df79d!8m2!3d6.1519784!4d-75.6117814!16s%2Fg%2F11r9ms6yxf?hl=es-419"
+                  loading="lazy"
+                ></iframe>
+              </div>
+              <div className={styles.mapCard}>
+                <h3>Itagüí</h3>
+                <iframe
+                  title="Sede Itagüí"
+                  src="https://www.google.com/maps/place/DROGUERIA+MEDICMAX+2/@6.169626,-75.60938,17z/data=!3m1!4b1!4m6!3m5!1s0x8e46831210644f67:0x64928cf430c71f8a!8m2!3d6.169626!4d-75.60938!16s%2Fg%2F11yk9t7gl1?hl=es-419"
+                  loading="lazy"
+                ></iframe>
+              </div>
+              
+            </div>
           </div>
         </section>
       </main>
