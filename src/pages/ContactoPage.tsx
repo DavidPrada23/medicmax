@@ -14,6 +14,10 @@ export default function ContactoPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const numeroWhatsApp = "573053022867";
+    const texto = `Hola, soy ${form.nombre} (${form.email}). ${form.mensaje}`;
+    const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(texto)}`;
+    window.open(url, "_blank");
     setEnviado(true);
   };
 
