@@ -13,6 +13,49 @@ type ProductoLite = {
   categoriaNombre?: string;
 };
 
+type CategoriaLite = {
+  id: number;
+  nombre: string;
+};
+
+type ProductoApiResponse = {
+  id?: number;
+  nombre?: string;
+  precio?: number | string;
+  price?: number | string;
+  imagen?: string;
+  image?: string;
+  urlImagen?: string;
+  categoria?: {
+    slug?: string;
+    nombre?: string;
+  };
+  categoriaSlug?: string;
+  categoriaNombre?: string;
+};
+
+const normalizeProducto = (raw: unknown): ProductoLite | null => {
+  if (!raw || typeof raw !== "object") return null;
+  const producto = raw as ProductoApiResponse;
+  if (typeof producto.id !== "number" || typeof producto.nombre !== "string") {
+    return null;
+  }
+
+  const priceSource = producto.precio ?? producto.price ?? 0;
+  const parsedPrice =
+    typeof priceSource === "string" ? Number(priceSource) : Number(priceSource ?? 0);
+  const precio = Number.isFinite(parsedPrice) ? parsedPrice : 0;
+
+  return {
+    id: producto.id,
+    nombre: producto.nombre,
+    precio,
+    imagen: producto.imagen || producto.image || producto.urlImagen || undefined,
+    categoriaSlug: producto.categoria?.slug || producto.categoriaSlug || undefined,
+    categoriaNombre: producto.categoria?.nombre || producto.categoriaNombre || undefined,
+  };
+};
+
 export default function SearchBox() {
   const navigate = useNavigate();
   const { agregarAlCarrito } = useCart();
@@ -53,8 +96,17 @@ export default function SearchBox() {
     // sugerencias por categorías (rápido)
     async function loadCats() {
       try {
-        const cats = await getCategorias();
-        const names = (cats || []).slice(0, 6).map((c: any) => c.nombre);
+        const catsResponse: unknown = await getCategorias();
+        if (!Array.isArray(catsResponse)) return;
+
+        const names = catsResponse
+          .filter((cat): cat is CategoriaLite => {
+            if (!cat || typeof cat !== "object") return false;
+            const maybeCat = cat as { nombre?: unknown };
+            return typeof maybeCat.nombre === "string";
+          })
+          .slice(0, 6)
+          .map((cat) => cat.nombre);
         setSuggestions(names);
       } catch {
         // ignore
@@ -76,22 +128,16 @@ export default function SearchBox() {
     setLoading(true);
     debounceRef.current = window.setTimeout(async () => {
       try {
-        const data: any = await buscarProductos(query);
-        // data can be error object from backend
+        const data: unknown = await buscarProductos(query);
         if (!Array.isArray(data)) {
           setResults([]);
           setError("No se pudieron obtener resultados.");
         } else {
-          // map to ProductoLite
-          const mapped = data.map((p: any) => ({
-            id: p.id,
-            nombre: p.nombre,
-            precio: Number(p.precio || p.price || 0),
-            imagen: p.imagen || p.image || p.urlImagen || undefined,
-            categoriaSlug: p.categoria?.slug || p.categoriaSlug || undefined,
-            categoriaNombre: p.categoria?.nombre || p.categoriaNombre || undefined,
-          }));
-          setResults(mapped.slice(0, 8));
+          const mapped = data
+            .map((item) => normalizeProducto(item))
+            .filter((item): item is ProductoLite => item !== null)
+            .slice(0, 8);
+          setResults(mapped);
           setError(null);
         }
       } catch (err) {

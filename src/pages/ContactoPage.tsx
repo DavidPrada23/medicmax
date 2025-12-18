@@ -30,15 +30,16 @@ export default function ContactoPage() {
           <div className={styles.infoGrid}>
             <div>
               <strong>WhatsApp</strong>
-              <p>+57 321 555-2323</p>
+              <p>+57 305 302-2867</p>
             </div>
             <div>
               <strong>Correo</strong>
-              <p>contacto@medicmax.com</p>
+              <p>drogueriamedicmax@gmail.com</p>
             </div>
             <div>
               <strong>Horario</strong>
-              <p>Lunes a sábado: 8:00am - 8:00pm</p>
+              <p>Lunes a sábado: 7:00am - 9:00pm</p>
+              <p>Domingo y festivos: 8:00am - 8:00pm</p>
             </div>
           </div>
         </section>
@@ -67,7 +68,7 @@ export default function ContactoPage() {
           <div className={styles.mapa}>
             <iframe
               title="Ubicación MedicMax"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.997239223007!2d-74.08175!3d4.60971!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f99e35d4bb0d1%3A0x33b4bda8edac2ffb!2sBogot%C3%A1%2C%20Colombia!5e0!3m2!1ses!2sco!4v1716576000000!5m2!1ses!2sco"
+              src="https://www.google.com/maps/place/Droguer%C3%ADa+MedicMax/@4.710989,-74.0720923,15z/data=!4m5!3m4!1s0x0:0x8f3c1e2f3e6f4e0!8m2!3d4.710989!4d-74.0720923"
               loading="lazy"
             ></iframe>
           </div>
