@@ -4,11 +4,17 @@ interface Categoria {
   id: number;
   nombre: string;
   imagen: string;
+  slug: string;
 }
 
-export default function CategoryCard({ categoria }: { categoria: Categoria }) {
+interface Props {
+  categoria: Categoria;
+  onClick?: () => void;
+}
+
+export default function CategoryCard({ categoria, onClick }: Props) {
   return (
-    <div className={styles.categoryCard}>
+    <div className={styles.categoryCard} onClick={onClick}>
       <img src={categoria.imagen} alt={categoria.nombre} />
       <div className={styles.overlay}>
         <h3>{categoria.nombre}</h3>
