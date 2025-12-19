@@ -3,10 +3,15 @@ import Footer from "../components/Footer";
 import styles from "../styles/Cart.module.css";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { getProductos } from "../services/api";
+import type { Producto } from "../types/Producto";
+import ProductCard from "../components/ProductCard";
 
 export default function Cart() {
   const { carrito, actualizarCantidad, eliminarDelCarrito } = useCart();
   const navigate = useNavigate();
+  const [sugeridos, setSugeridos] = useState<Producto[]>([]);
 
   const subtotal = carrito.reduce(
     (total, p) => total + (p.cantidad ?? 1) * p.precio,
@@ -15,6 +20,41 @@ export default function Cart() {
   const envio = 5000;
   const impuestos = Math.round(subtotal * 0.19);
   const total = subtotal + envio + impuestos;
+
+  useEffect(() => {
+    async function cargarSugeridos() {
+      try {
+        const data = await getProductos();
+        setSugeridos(data.slice(0, 12));
+      } catch (error) {
+        console.error("Error al cargar sugeridos", error);
+      }
+    }
+
+    cargarSugeridos();
+  }, []);
+
+  const [inicio, setInicio] = useState(0);
+  const visibles = useMemo(
+    () => sugeridos.slice(inicio, inicio + 4),
+    [sugeridos, inicio]
+  );
+
+  const avanzar = () => {
+    setInicio((prev) => {
+      if (sugeridos.length <= 4) return 0;
+      const next = prev + 4;
+      return next >= sugeridos.length ? 0 : next;
+    });
+  };
+
+  const retroceder = () => {
+    setInicio((prev) => {
+      if (sugeridos.length <= 4) return 0;
+      const next = prev - 4;
+      return next < 0 ? Math.max(sugeridos.length - 4, 0) : next;
+    });
+  };
 
   return (
     <>
@@ -94,6 +134,51 @@ export default function Cart() {
           </div>
         )}
       </main>
+      <section className={styles.beneficios}>
+        <div className={styles.beneficiosCard}>
+          <span className={styles.beneficioEmoji}>🚚</span>
+          <div>
+            <h3>Envíos rápidos</h3>
+            <p>Entregamos en Sabaneta, Itagüí, Envigado en menos de 55 minutos.</p>
+          </div>
+        </div>
+        <div className={styles.beneficiosCard}>
+          <span className={styles.beneficioEmoji}>🔒</span>
+          <div>
+            <h3>Compra segura</h3>
+            <p>Pagos protegidos y seguimiento de tu pedido en tiempo real.</p>
+          </div>
+        </div>
+        <div className={styles.beneficiosCard}>
+          <span className={styles.beneficioEmoji}>💬</span>
+          <div>
+            <h3>Soporte personalizado</h3>
+            <p>Asesores disponibles por WhatsApp y teléfono.</p>
+          </div>
+        </div>
+      </section>
+      {sugeridos.length > 0 && (
+        <section className={styles.sugerencias}>
+          <div className={styles.sugerenciasHeader}>
+            <h2>Productos que también te pueden interesar</h2>
+            <div className={styles.controlesCarousel}>
+              <button onClick={retroceder} aria-label="Ver productos anteriores">
+                ←
+              </button>
+              <button onClick={avanzar} aria-label="Ver productos siguientes">
+                →
+              </button>
+            </div>
+          </div>
+          <div className={styles.slider}>
+            {visibles.map((p) => (
+              <div key={p.id} className={styles.sliderItem}>
+                <ProductCard producto={p} />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
       <Footer />
     </>
   );

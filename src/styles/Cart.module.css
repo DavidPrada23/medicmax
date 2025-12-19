@@ -12,9 +12,10 @@ h1 {
 }
 
 .carrito {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) 330px;
   gap: 2rem;
+  align-items: start;
 }
 
 .tabla {
@@ -71,8 +72,7 @@ h1 {
   padding: 1.5rem;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  max-width: 350px;
-  align-self: flex-end;
+  width: 100%;
 }
 
 .resumen h2 {
@@ -118,10 +118,88 @@ hr {
   background-color: #0194a1;
 }
 
+.sugerencias {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0 2rem 3rem;
+}
+
+.beneficios {
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.beneficiosCard {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.06);
+  align-items: center;
+}
+
+.beneficioEmoji {
+  font-size: 1.8rem;
+}
+
+.beneficiosCard h3 {
+  margin: 0;
+  color: var(--secondary);
+}
+
+.beneficiosCard p {
+  margin: 0.3rem 0 0;
+  color: #5c6b74;
+  font-size: 0.95rem;
+}
+
+.sugerenciasHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.controlesCarousel button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  font-size: 1.1rem;
+  margin-left: 0.5rem;
+  transition: background 0.2s;
+}
+
+.controlesCarousel button:hover {
+  background: #f3f6f7;
+}
+
+.slider {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.sliderItem {
+  display: flex;
+}
+
 /* Responsivo */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .carrito {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+  }
+
+  .resumen {
+    max-width: 420px;
+    margin: 0 auto;
   }
 
   .tabla th,
@@ -130,8 +208,9 @@ hr {
     font-size: 0.8rem;
   }
 
-  .resumen {
-    width: 100%;
-    align-self: center;
+  .sugerenciasHeader {
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: flex-start;
   }
 }

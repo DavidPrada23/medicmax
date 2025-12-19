@@ -45,13 +45,13 @@ h1 {
   padding: .6rem;
   border: 1px solid #ddd;
   border-radius: 8px;
-  background: #fafafa;
+  background: #0194a1;
   cursor: pointer;
   transition: .2s;
 }
 
 .filtroGrupo button:hover {
-  background: #e8f0fe;
+  background: #052533;
 }
 
 .btnClear {

@@ -28,8 +28,8 @@ export default function Home() {
   const categorias = [
     {
       id: 1,
-      nombre: "Analgesicos y Antiinflamatorios",
-      slug: "analgesicos-y-antiinflamatorios",
+      nombre: "Analgesicos",
+      slug: "analgesicos",
       imagen:
         "https://lh3.googleusercontent.com/aida-public/AB6AXuC4iuiWkUzddLOzJ50-9-brW9Vet3L0iOJBXA-Ox1weEkBN7ALHeqBm7TSCbORdoSZFfS6r1A4ksSEsmzH67GHGkeUABKt_9y-G5klBMA93UsWxsukmchgm55FzQmFcPNre9m4SIyK0PE-FjWrfVVW-NIV8zhB6Nn_uQpsi7iHoTio6KO639zxU7PvX30N1VbmFG0deNj8mRJ31bCFdYJ093uRJjDwrM5SI6jQFDvapD5XNvX0gpsl-DTHYw6P9o35HIV3w5U_R1A",
     },
@@ -42,8 +42,8 @@ export default function Home() {
     },
     {
       id: 2,
-      nombre: "Vitaminas y Suplementos",
-      slug: "vitaminas-y-suplementos",
+      nombre: "Vitaminas",
+      slug: "vitaminas",
       imagen:
         "https://lh3.googleusercontent.com/aida-public/AB6AXuCa9oircZC7uJpg9D2T1IW7EYerpoIhSN2RVEnJFnY1fu4CwKuGKjPYhxKQWc8kAPO41eFPIuKbZVaXwFVGtp6cvX7i_k9yRiYJvM6mCBd6k0etxA-jbSRTXAGQkJ0ZjvMbJ0V9dQek84c--OfZvlRCrAfZkA66lKXM1ERaiuR1iR2ME2zM6jP_m8jJRTMVXJ9WMYR5FJNsDEaI6MQLUNqAA8v4Gj_EYs1K1CUoS1i6TfNY93QRtzZNKB2dWiPODTFCVkDy7e0C2w",
     },
