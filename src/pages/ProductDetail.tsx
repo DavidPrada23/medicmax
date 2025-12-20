@@ -151,6 +151,25 @@ export default function ProductDetail() {
                   <h4>{p.nombre}</h4>
                   <p>${p.precio.toLocaleString()}</p>
 
+                  <div className={styles.cantidadContainer}>
+                    <label>Cantidad:</label>
+                    <div className={styles.controles}>
+                      <button
+                        onClick={() => setCantidad((c) => Math.max(c - 1, 1))}
+                        className={styles.btnCantidad}
+                      >
+                        -
+                      </button>
+                      <span>{cantidad}</span>
+                      <button
+                        onClick={() => setCantidad((c) => c + 1)}
+                        className={styles.btnCantidad}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
                   <button
                     className={styles.btnAgregar}
                     onClick={(e) => {
@@ -159,12 +178,6 @@ export default function ProductDetail() {
                     }}
                   >
                     Agregar al carrito
-                  </button>
-                  <button
-                    className={styles.btnComprar}
-                    onClick={handleComprarAhora}
-                  >
-                    Comprar ahora
                   </button>
                 </div>
               ))}
