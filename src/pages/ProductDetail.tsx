@@ -22,6 +22,7 @@ export default function ProductDetail() {
   const [relacionados, setRelacionados] = useState<Producto[]>([]);
   const [cantidad, setCantidad] = useState(1);
   const [loading, setLoading] = useState(!productoState);
+  const [relacionadosVisibles, setRelacionadosVisibles] = useState(4);
 
   useEffect(() => {
     async function fetchProducto() {
@@ -134,9 +135,25 @@ export default function ProductDetail() {
         {/* 🔹 RELACIONADOS */}
         {relacionados.length > 0 && (
           <section className={styles.relacionados}>
-            <h2>Productos relacionados</h2>
+            <div className={styles.relacionadosHeader}>
+              <h2>Productos relacionados</h2>
+              {relacionados.length > relacionadosVisibles && (
+                <button
+                  type="button"
+                  className={styles.arrowButton}
+                  onClick={() =>
+                    setRelacionadosVisibles((count) =>
+                      Math.min(count + 4, relacionados.length)
+                    )
+                  }
+                  aria-label="Mostrar más productos relacionados"
+                >
+                  →
+                </button>
+              )}
+            </div>
             <div className={styles.gridRelacionados}>
-              {relacionados.map((p) => (
+              {relacionados.slice(0, relacionadosVisibles).map((p) => (
                 <div
                   key={p.id}
                   className={styles.cardRelacionado}
