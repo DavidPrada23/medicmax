@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import styles from "../styles/ProductDetail.module.css";
 import { useCart } from "../context/CartContext";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Producto } from "../types/Producto";
 import { getProducto, getRelacionados } from "../services/api";
 import FloatingWhatsApp from "../components/FloatingWhatsApp";
@@ -22,26 +22,43 @@ export default function ProductDetail() {
   const [relacionados, setRelacionados] = useState<Producto[]>([]);
   const [cantidad, setCantidad] = useState(1);
   const [loading, setLoading] = useState(!productoState);
-  const [relacionadosVisibles, setRelacionadosVisibles] = useState(4);
+  const relacionadosRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    let isActive = true;
+
     async function fetchProducto() {
-      if (productoState) return; // Ya lo tenemos desde el estado de la navegación
+      if (productoState) {
+        setProducto(productoState);
+        setLoading(false);
+        return; // Ya lo tenemos desde el estado de la navegación
+      }
 
       if (!id) return;
 
+      setProducto(null);
+      setLoading(true);
+
       try {
         const data = await getProducto(id);
-        setProducto(data);
+        if (isActive) setProducto(data);
       } catch (error) {
         console.error(error);
       } finally {
-        setLoading(false);
+        if (isActive) setLoading(false);
       }
     }
 
     fetchProducto();
+
+    return () => {
+      isActive = false;
+    };
   }, [id, productoState]);
+
+  useEffect(() => {
+    setCantidad(1);
+  }, [id]);
 
   useEffect(() => {
     async function fetchRelacionados() {
@@ -137,23 +154,28 @@ export default function ProductDetail() {
           <section className={styles.relacionados}>
             <div className={styles.relacionadosHeader}>
               <h2>Productos relacionados</h2>
-              {relacionados.length > relacionadosVisibles && (
-                <button
-                  type="button"
-                  className={styles.arrowButton}
-                  onClick={() =>
-                    setRelacionadosVisibles((count) =>
-                      Math.min(count + 4, relacionados.length)
-                    )
-                  }
-                  aria-label="Mostrar más productos relacionados"
-                >
-                  →
-                </button>
-              )}
             </div>
-            <div className={styles.gridRelacionados}>
-              {relacionados.slice(0, relacionadosVisibles).map((p) => (
+            <div className={styles.carousel}>
+              <button
+                type="button"
+                className={styles.carouselArrowLeft}
+                aria-label="Ver productos anteriores"
+                onClick={() => {
+                  if (!relacionadosRef.current) return;
+                  const card = relacionadosRef.current.querySelector(
+                    `.${styles.cardRelacionado}`
+                  ) as HTMLElement | null;
+                  const step = (card?.offsetWidth || 240) + 24;
+                  relacionadosRef.current.scrollBy({
+                    left: -step,
+                    behavior: "smooth",
+                  });
+                }}
+              >
+                ‹
+              </button>
+              <div className={styles.gridRelacionados} ref={relacionadosRef}>
+                {relacionados.map((p) => (
                 <div
                   key={p.id}
                   className={styles.cardRelacionado}
@@ -198,6 +220,25 @@ export default function ProductDetail() {
                   </button>
                 </div>
               ))}
+              </div>
+              <button
+                type="button"
+                className={styles.carouselArrowRight}
+                aria-label="Ver más productos"
+                onClick={() => {
+                  if (!relacionadosRef.current) return;
+                  const card = relacionadosRef.current.querySelector(
+                    `.${styles.cardRelacionado}`
+                  ) as HTMLElement | null;
+                  const step = (card?.offsetWidth || 240) + 24;
+                  relacionadosRef.current.scrollBy({
+                    left: step,
+                    behavior: "smooth",
+                  });
+                }}
+              >
+                ›
+              </button>
             </div>
           </section>
         )}

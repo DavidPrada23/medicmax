@@ -99,63 +99,144 @@
   margin: 0;
 }
 
+.carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .gridRelacionados {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-  padding: 0 1rem;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(230px, 260px);
+  gap: 1.6rem;
+  padding: 0.75rem 2.5rem 1.2rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.gridRelacionados::-webkit-scrollbar {
+  display: none;
 }
 
 .cardRelacionado {
   background: #fff;
-  border-radius: 14px;
-  padding: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 1rem 1.1rem 1.2rem;
+  border: 1px solid #eef1f3;
+  box-shadow: 0 10px 24px rgba(13, 38, 76, 0.08);
   cursor: pointer;
-  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .cardRelacionado:hover {
-  transform: scale(1.03);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 28px rgba(13, 38, 76, 0.14);
 }
 
 .cardRelacionado img {
   width: 100%;
-  height: 160px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 0.5rem;
+  height: 150px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #f7f9fb;
+  padding: 0.5rem;
+  margin-bottom: 0.2rem;
 }
 
 .cardRelacionado h4 {
-  color: var(--secondary);
-  margin-bottom: 0.3rem;
+  color: #0f2c3f;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0.2rem 0 0.1rem;
+  min-height: 2.4em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .cardRelacionado p {
   color: var(--primary);
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+  font-weight: 800;
+  font-size: 1.05rem;
+  margin: 0.1rem 0 0.4rem;
 }
 
-.arrowButton {
-  width: 42px;
-  height: 42px;
+.cardRelacionado .cantidadContainer {
+  margin-top: 0.4rem;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  justify-content: space-between;
+}
+
+.cardRelacionado .cantidadContainer label {
+  color: #5c6b74;
+  font-weight: 600;
+}
+
+.cardRelacionado .controles {
+  gap: 0.4rem;
+}
+
+.cardRelacionado .btnCantidad {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  font-size: 1rem;
+}
+
+.cardRelacionado .controles span {
+  font-size: 1rem;
+}
+
+.cardRelacionado .btnAgregar {
+  width: 100%;
+  margin-top: 0.6rem;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+}
+
+.carouselArrowLeft,
+.carouselArrowRight {
+  position: absolute;
+  top: 50%;
+  width: 44px;
+  height: 44px;
   border-radius: 999px;
-  border: 2px solid var(--primary);
+  border: 2px solid #d9d9d9;
   background: #fff;
-  color: var(--primary);
-  font-size: 1.4rem;
+  color: #111;
+  font-size: 2rem;
   line-height: 1;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transform: translateY(-50%);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 2;
 }
 
-.arrowButton:hover {
-  background: var(--primary);
-  color: #fff;
-  transform: translateX(2px);
+.carouselArrowLeft {
+  left: -12px;
 }
+
+.carouselArrowRight {
+  right: -12px;
+}
+
+.carouselArrowLeft:hover,
+.carouselArrowRight:hover {
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+}
+
 
 /* Botón volver */
 .btnVolver {
@@ -245,5 +326,10 @@
   .botones,
   .cantidadContainer {
     justify-content: center;
+  }
+
+  .carouselArrowLeft,
+  .carouselArrowRight {
+    display: none;
   }
 }

@@ -166,19 +166,23 @@ hr {
 }
 
 .controlesCarousel button {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid #ddd;
-  background: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 2px solid #d9d9d9;
+  background: #fff;
+  color: #111;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 2rem;
+  line-height: 1;
   margin-left: 0.5rem;
-  transition: background 0.2s;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .controlesCarousel button:hover {
-  background: #f3f6f7;
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
 }
 
 .slider {
