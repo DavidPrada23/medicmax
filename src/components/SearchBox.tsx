@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "../styles/SearchBox.module.css";
-import { buscarProductos, getCategorias } from "../services/api";
+import { buscarProductos, getCategorias, getProductosFiltrados } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
@@ -16,6 +16,7 @@ type ProductoLite = {
 type CategoriaLite = {
   id: number;
   nombre: string;
+  slug: string;
 };
 
 type ProductoApiResponse = {
@@ -63,7 +64,7 @@ export default function SearchBox() {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [results, setResults] = useState<ProductoLite[]>([]);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [categorias, setCategorias] = useState<CategoriaLite[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [highlightIndex, setHighlightIndex] = useState<number>(-1);
@@ -99,15 +100,22 @@ export default function SearchBox() {
         const catsResponse: unknown = await getCategorias();
         if (!Array.isArray(catsResponse)) return;
 
-        const names = catsResponse
+        const cats = catsResponse
           .filter((cat): cat is CategoriaLite => {
             if (!cat || typeof cat !== "object") return false;
-            const maybeCat = cat as { nombre?: unknown };
-            return typeof maybeCat.nombre === "string";
+            const maybeCat = cat as { id?: unknown; nombre?: unknown; slug?: unknown };
+            return (
+              typeof maybeCat.id === "number" &&
+              typeof maybeCat.nombre === "string" &&
+              typeof maybeCat.slug === "string"
+            );
           })
-          .slice(0, 6)
-          .map((cat) => cat.nombre);
-        setSuggestions(names);
+          .map((cat) => ({
+            id: cat.id,
+            nombre: cat.nombre,
+            slug: cat.slug,
+          }));
+        setCategorias(cats);
       } catch {
         // ignore
       }
@@ -128,17 +136,41 @@ export default function SearchBox() {
     setLoading(true);
     debounceRef.current = window.setTimeout(async () => {
       try {
-        const data: unknown = await buscarProductos(query);
-        if (!Array.isArray(data)) {
-          setResults([]);
-          setError("No se pudieron obtener resultados.");
-        } else {
-          const mapped = data
+        const normalizedQuery = query.trim().toLowerCase();
+        const matchedCategory = categorias.find(
+          (cat) => cat.nombre.toLowerCase() === normalizedQuery
+        );
+
+        if (matchedCategory) {
+          const data: unknown = await getProductosFiltrados({
+            categoria: matchedCategory.slug,
+            page: 0,
+            size: 8,
+          });
+          const items = Array.isArray((data as { content?: unknown }).content)
+            ? (data as { content: unknown[] }).content
+            : Array.isArray(data)
+              ? data
+              : [];
+          const mapped = items
             .map((item) => normalizeProducto(item))
             .filter((item): item is ProductoLite => item !== null)
             .slice(0, 8);
           setResults(mapped);
           setError(null);
+        } else {
+          const data: unknown = await buscarProductos(query);
+          if (!Array.isArray(data)) {
+            setResults([]);
+            setError("No se pudieron obtener resultados.");
+          } else {
+            const mapped = data
+              .map((item) => normalizeProducto(item))
+              .filter((item): item is ProductoLite => item !== null)
+              .slice(0, 8);
+            setResults(mapped);
+            setError(null);
+          }
         }
       } catch (err) {
         console.error(err);
@@ -151,7 +183,7 @@ export default function SearchBox() {
     return () => {
       if (debounceRef.current) window.clearTimeout(debounceRef.current);
     };
-  }, [query]);
+  }, [query, categorias]);
 
   // keyboard navigation
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -184,12 +216,21 @@ export default function SearchBox() {
     localStorage.setItem("search_history_medicmax", JSON.stringify(h));
   };
 
+  const applyQuery = (q: string, e?: React.MouseEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    setQuery(q);
+    setOpen(true);
+    setHighlightIndex(-1);
+    requestAnimationFrame(() => inputRef.current?.focus());
+  };
+
   const goToProduct = (p: ProductoLite) => {
     saveHistory(query);
     setOpen(false);
     setQuery("");
     setResults([]);
-    navigate(`/producto/${p.id}`, { state: { producto: p } });
+    navigate(`/product/${p.id}`, { state: { producto: p } });
   };
 
   const doFullSearch = () => {
@@ -257,7 +298,7 @@ export default function SearchBox() {
                   <div className={styles.sectionTitle}>Historial</div>
                   <div className={styles.tags}>
                     {history.map((h) => (
-                      <button key={h} className={styles.tag} onClick={() => { setQuery(h); setOpen(true); }}>
+                      <button key={h} className={styles.tag} onClick={(e) => applyQuery(h, e)}>
                         {h}
                       </button>
                     ))}
@@ -268,9 +309,9 @@ export default function SearchBox() {
               <div className={styles.section}>
                 <div className={styles.sectionTitle}>Sugerencias</div>
                 <div className={styles.tags}>
-                  {suggestions.map((s) => (
-                    <button key={s} className={styles.tag} onClick={() => { setQuery(s); inputRef.current?.focus(); }}>
-                      {s}
+                  {categorias.slice(0, 6).map((s) => (
+                    <button key={s.id} className={styles.tag} onClick={(e) => applyQuery(s.nombre, e)}>
+                      {s.nombre}
                     </button>
                   ))}
                 </div>

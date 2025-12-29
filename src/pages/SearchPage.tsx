@@ -5,7 +5,7 @@ import type { Producto } from "../types/Producto";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { getRelacionados } from "../services/api";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface SearchState {
   resultados: Producto[];
@@ -17,8 +17,8 @@ export default function SearchPage() {
   const location = useLocation();
   const state = location.state as SearchState | null;
 
-  const resultados = state?.resultados ?? [];
-  const query = state?.query ?? "";
+  const resultados = useMemo(() => state?.resultados ?? [], [state]);
+  const query = useMemo(() => state?.query ?? "", [state]);
 
   const { agregarAlCarrito } = useCart();
   const [relacionados, setRelacionados] = useState<Producto[]>([]);
