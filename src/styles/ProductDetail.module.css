@@ -159,6 +159,7 @@
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  line-clamp: 2;
   overflow: hidden;
 }
 
@@ -331,5 +332,15 @@
   .carouselArrowLeft,
   .carouselArrowRight {
     display: none;
+  }
+
+  .gridRelacionados {
+    grid-auto-columns: minmax(200px, 220px);
+    padding: 0.5rem 1rem 1rem;
+    gap: 1rem;
+  }
+
+  .cardRelacionado img {
+    height: 130px;
   }
 }

@@ -217,4 +217,15 @@ hr {
     gap: 0.8rem;
     align-items: flex-start;
   }
+
+  .slider {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.8rem;
+  }
+
+  .controlesCarousel button {
+    width: 40px;
+    height: 40px;
+    font-size: 1.6rem;
+  }
 }

@@ -26,14 +26,17 @@ ul {
 }
 
 li {
-  color: var(--text);
   font-size: 0.9rem;
   margin: 0.3rem 0;
-  cursor: pointer;
+}
+
+.link {
+  color: var(--text);
+  text-decoration: none;
   transition: color 0.2s;
 }
 
-li:hover {
+.link:hover {
   color: var(--primary);
 }
 
