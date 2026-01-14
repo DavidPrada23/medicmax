@@ -104,6 +104,20 @@
 .quickAdd {
   background:#0a9; border:none; color:#fff; width:34px; height:34px; border-radius:8px; cursor:pointer; font-weight:700;
 }
+.whatsappBtn {
+  background:#25d366;
+  color:#fff;
+  text-decoration:none;
+  padding:6px 10px;
+  border-radius:8px;
+  font-weight:700;
+  font-size:12px;
+}
+.agotadoLabel {
+  font-size:12px;
+  font-weight:600;
+  color:#a33;
+}
 
 .noFound { padding:12px; color:#666; text-align:center; }
 

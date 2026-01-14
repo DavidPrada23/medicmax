@@ -1,6 +1,6 @@
 import styles from "../styles/FloatingWhatsApp.module.css";
 
-const WHATSAPP_URL =
+export const WHATSAPP_URL =
   "https://api.whatsapp.com/send/?phone=573053022867&text&type=phone_number&app_absent=0";
 
 export default function FloatingWhatsApp() {

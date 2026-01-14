@@ -196,6 +196,36 @@
   gap: 0.5rem;
 }
 
+.agotadoBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: center;
+  text-align: center;
+  padding: 0.6rem 0.4rem 0.2rem;
+}
+
+.agotadoLabel {
+  font-size: 0.85rem;
+  color: #a33;
+  font-weight: 600;
+}
+
+.whatsappBtn {
+  background-color: #25d366;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.whatsappBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(37, 211, 102, 0.3);
+}
+
 .btnAgregar {
   background-color: var(--primary);
   color: white;

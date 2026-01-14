@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { getRelacionados } from "../services/api";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { WHATSAPP_URL } from "../components/FloatingWhatsApp";
 
 interface SearchState {
   resultados: Producto[];
@@ -115,15 +116,31 @@ export default function SearchPage() {
                           >
                             Ver
                           </button>
-                          <button
-                            className={styles.btnGhost}
-                            onClick={() =>
-                              agregarAlCarrito({ ...p, cantidad: 1 })
-                            }
-                          >
-                            Agregar al carrito
-                          </button>
+                          {p.stock === 0 ? (
+                            <a
+                              className={styles.whatsappBtn}
+                              href={WHATSAPP_URL}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              Consultar por WhatsApp
+                            </a>
+                          ) : (
+                            <button
+                              className={styles.btnGhost}
+                              onClick={() =>
+                                agregarAlCarrito({ ...p, cantidad: 1 })
+                              }
+                            >
+                              Agregar al carrito
+                            </button>
+                          )}
                         </div>
+                        {p.stock === 0 && (
+                          <span className={styles.agotadoLabel}>
+                            Agotado, escríbenos al WhatsApp para consultar disponibilidad en el punto.
+                          </span>
+                        )}
                       </div>
                     </div>
                   </article>
@@ -181,16 +198,33 @@ export default function SearchPage() {
                             >
                               Ver
                             </button>
-                            <button
-                              className={styles.btnGhost}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                agregarAlCarrito({ ...p, cantidad: 1 });
-                              }}
-                            >
-                              Agregar al carrito
-                            </button>
+                            {p.stock === 0 ? (
+                              <a
+                                className={styles.whatsappBtn}
+                                href={WHATSAPP_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                Consultar por WhatsApp
+                              </a>
+                            ) : (
+                              <button
+                                className={styles.btnGhost}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  agregarAlCarrito({ ...p, cantidad: 1 });
+                                }}
+                              >
+                                Agregar al carrito
+                              </button>
+                            )}
                           </div>
+                          {p.stock === 0 && (
+                            <span className={styles.agotadoLabelSmall}>
+                              Agotado, consulta por WhatsApp.
+                            </span>
+                          )}
                         </div>
                       ))}
                     </div>

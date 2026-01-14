@@ -6,7 +6,7 @@ import { useCart } from "../context/CartContext";
 import { useEffect, useRef, useState } from "react";
 import type { Producto } from "../types/Producto";
 import { getProducto, getRelacionados } from "../services/api";
-import FloatingWhatsApp from "../components/FloatingWhatsApp";
+import FloatingWhatsApp, { WHATSAPP_URL } from "../components/FloatingWhatsApp";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -28,7 +28,12 @@ export default function ProductDetail() {
     let isActive = true;
 
     async function fetchProducto() {
-      if (productoState) {
+      const hasFullState =
+        productoState &&
+        typeof productoState.descripcion === "string" &&
+        typeof productoState.stock === "number";
+
+      if (hasFullState) {
         setProducto(productoState);
         setLoading(false);
         return; // Ya lo tenemos desde el estado de la navegación
@@ -83,6 +88,8 @@ export default function ProductDetail() {
     );
   }
 
+  const agotado = producto.stock === 0;
+
   const handleAgregar = () => {
     agregarAlCarrito({ ...producto, cantidad });
   };
@@ -113,39 +120,64 @@ export default function ProductDetail() {
             <p className={styles.descripcion}>{producto.descripcion}</p>
             <p className={styles.precio}>${producto.precio.toLocaleString()}</p>
 
-            <div className={styles.cantidadContainer}>
-              <label>Cantidad:</label>
-              <div className={styles.controles}>
-                <button
-                  onClick={() => setCantidad((c) => Math.max(c - 1, 1))}
-                  className={styles.btnCantidad}
-                >
-                  -
-                </button>
-                <span>{cantidad}</span>
-                <button
-                  onClick={() => setCantidad((c) => c + 1)}
-                  className={styles.btnCantidad}
-                >
-                  +
-                </button>
-              </div>
-            </div>
+            {agotado ? (
+              <>
+                <div className={styles.agotadoBox}>
+                  <span className={styles.agotadoLabel}>
+                    Agotado, escríbenos al WhatsApp para consultar disponibilidad en el punto.
+                  </span>
+                </div>
+                <div className={styles.botones}>
+                  <a
+                    className={styles.whatsappBtn}
+                    href={WHATSAPP_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Consultar por WhatsApp
+                  </a>
+                  <button className={styles.btnVolver} onClick={() => navigate(-1)}>
+                    ← Volver
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className={styles.cantidadContainer}>
+                  <label>Cantidad:</label>
+                  <div className={styles.controles}>
+                    <button
+                      onClick={() => setCantidad((c) => Math.max(c - 1, 1))}
+                      className={styles.btnCantidad}
+                    >
+                      -
+                    </button>
+                    <span>{cantidad}</span>
+                    <button
+                      onClick={() => setCantidad((c) => c + 1)}
+                      className={styles.btnCantidad}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
 
-            <div className={styles.botones}>
-              <button className={styles.btnAgregar} onClick={handleAgregar}>
-                Agregar al carrito
-              </button>
-              <button
-                className={styles.btnComprar}
-                onClick={handleComprarAhora}
-              >
-                Comprar ahora
-              </button>
-              <button className={styles.btnVolver} onClick={() => navigate(-1)}>
-                ← Volver
-              </button>
-            </div>
+                <div className={styles.botones}>
+                  <button className={styles.btnAgregar} onClick={handleAgregar}>
+                    Agregar al carrito
+                  </button>
+                  <button
+                    className={styles.btnComprar}
+                    onClick={handleComprarAhora}
+                  >
+                    Comprar ahora
+                  </button>
+                  <button className={styles.btnVolver} onClick={() => navigate(-1)}>
+                    ← Volver
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -175,51 +207,73 @@ export default function ProductDetail() {
                 ‹
               </button>
               <div className={styles.gridRelacionados} ref={relacionadosRef}>
-                {relacionados.map((p) => (
-                <div
-                  key={p.id}
-                  className={styles.cardRelacionado}
-                  onClick={() =>
-                    navigate(`/product/${p.id}`, { state: { producto: p } })
-                  }
-                >
-                  <img
-                    src={p.imagen || "/placeholder-product.png"}
-                    alt={p.nombre}
-                  />
-                  <h4>{p.nombre}</h4>
-                  <p>${p.precio.toLocaleString()}</p>
+                {relacionados.map((p) => {
+                  const relatedAgotado = p.stock === 0;
+                  return (
+                    <div
+                      key={p.id}
+                      className={styles.cardRelacionado}
+                      onClick={() =>
+                        navigate(`/product/${p.id}`, { state: { producto: p } })
+                      }
+                    >
+                      <img
+                        src={p.imagen || "/placeholder-product.png"}
+                        alt={p.nombre}
+                      />
+                      <h4>{p.nombre}</h4>
+                      <p>${p.precio.toLocaleString()}</p>
 
-                  <div className={styles.cantidadContainer}>
-                    <label>Cantidad:</label>
-                    <div className={styles.controles}>
-                      <button
-                        onClick={() => setCantidad((c) => Math.max(c - 1, 1))}
-                        className={styles.btnCantidad}
-                      >
-                        -
-                      </button>
-                      <span>{cantidad}</span>
-                      <button
-                        onClick={() => setCantidad((c) => c + 1)}
-                        className={styles.btnCantidad}
-                      >
-                        +
-                      </button>
+                      {relatedAgotado ? (
+                        <>
+                          <span className={styles.agotadoLabelSmall}>
+                            Agotado, consulta por WhatsApp.
+                          </span>
+                          <a
+                            className={styles.whatsappBtnSmall}
+                            href={WHATSAPP_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            Consultar por WhatsApp
+                          </a>
+                        </>
+                      ) : (
+                        <>
+                          <div className={styles.cantidadContainer}>
+                            <label>Cantidad:</label>
+                            <div className={styles.controles}>
+                              <button
+                                onClick={() => setCantidad((c) => Math.max(c - 1, 1))}
+                                className={styles.btnCantidad}
+                              >
+                                -
+                              </button>
+                              <span>{cantidad}</span>
+                              <button
+                                onClick={() => setCantidad((c) => c + 1)}
+                                className={styles.btnCantidad}
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+
+                          <button
+                            className={styles.btnAgregar}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              agregarAlCarrito({ ...p, cantidad: 1 });
+                            }}
+                          >
+                            Agregar al carrito
+                          </button>
+                        </>
+                      )}
                     </div>
-                  </div>
-
-                  <button
-                    className={styles.btnAgregar}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      agregarAlCarrito({ ...p, cantidad: 1 });
-                    }}
-                  >
-                    Agregar al carrito
-                  </button>
-                </div>
-              ))}
+                  );
+                })}
               </div>
               <button
                 type="button"

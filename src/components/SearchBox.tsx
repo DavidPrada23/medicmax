@@ -3,6 +3,7 @@ import styles from "../styles/SearchBox.module.css";
 import { buscarProductos, getCategorias, getProductosFiltrados } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { WHATSAPP_URL } from "./FloatingWhatsApp";
 
 type ProductoLite = {
   id: number;
@@ -11,6 +12,7 @@ type ProductoLite = {
   imagen?: string;
   categoriaSlug?: string;
   categoriaNombre?: string;
+  stock?: number;
 };
 
 type CategoriaLite = {
@@ -27,6 +29,7 @@ type ProductoApiResponse = {
   imagen?: string;
   image?: string;
   urlImagen?: string;
+  stock?: number | string;
   categoria?: {
     slug?: string;
     nombre?: string;
@@ -46,6 +49,15 @@ const normalizeProducto = (raw: unknown): ProductoLite | null => {
   const parsedPrice =
     typeof priceSource === "string" ? Number(priceSource) : Number(priceSource ?? 0);
   const precio = Number.isFinite(parsedPrice) ? parsedPrice : 0;
+  const rawStock = producto.stock;
+  const parsedStock =
+    typeof rawStock === "string" ? Number(rawStock) : Number(rawStock);
+  const stock =
+    rawStock === undefined || rawStock === null
+      ? undefined
+      : Number.isFinite(parsedStock)
+        ? parsedStock
+        : undefined;
 
   return {
     id: producto.id,
@@ -54,6 +66,7 @@ const normalizeProducto = (raw: unknown): ProductoLite | null => {
     imagen: producto.imagen || producto.image || producto.urlImagen || undefined,
     categoriaSlug: producto.categoria?.slug || producto.categoriaSlug || undefined,
     categoriaNombre: producto.categoria?.nombre || producto.categoriaNombre || undefined,
+      stock,
   };
 };
 
@@ -243,6 +256,7 @@ export default function SearchBox() {
 
   const addQuick = (p: ProductoLite, e?: React.MouseEvent) => {
     e?.stopPropagation();
+    if (p.stock === 0) return;
     agregarAlCarrito({
       id: p.id,
       nombre: p.nombre,
@@ -250,7 +264,7 @@ export default function SearchBox() {
       imagen: p.imagen || "",
       precio: p.precio,
       cantidad: 1,
-      stock: 1,
+      stock: p.stock ?? 1,
       marca: p.categoriaNombre || "MedicMax",
     });
   };
@@ -347,7 +361,22 @@ export default function SearchBox() {
 
                     <div className={styles.actions}>
                       <div className={styles.price}>${Number(p.precio).toLocaleString()}</div>
-                      <button className={styles.quickAdd} onClick={(e) => addQuick(p, e)}>+</button>
+                      {p.stock === 0 ? (
+                        <>
+                          <a
+                            className={styles.whatsappBtn}
+                            href={WHATSAPP_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            WhatsApp
+                          </a>
+                          <span className={styles.agotadoLabel}>Agotado</span>
+                        </>
+                      ) : (
+                        <button className={styles.quickAdd} onClick={(e) => addQuick(p, e)}>+</button>
+                      )}
                     </div>
                   </li>
                 ))}
