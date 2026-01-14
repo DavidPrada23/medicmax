@@ -15,21 +15,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const agregarAlCarrito = (p: Producto) => {
     const cantidad = p.cantidad ?? 1;
-  const existing = carrito.find((item) => item.id === p.id);
+    const stock = p.stock;
+    if (typeof stock === "number" && stock <= 0) return;
 
-  if (existing) {
-    setCarrito(
-      carrito.map((item) =>
-        item.id === p.id
-          ? { ...item, cantidad: item.cantidad + (p.cantidad ?? 1) }
-          : item
-      )
-    );
-  } else {
-    const nuevoItem: CartItem = { ...p, cantidad };
-    setCarrito([ ...carrito, nuevoItem ]);
-  }
-};
+    const existing = carrito.find((item) => item.id === p.id);
+    if (existing) {
+      const nuevaCantidadBase = existing.cantidad + cantidad;
+      const nuevaCantidad =
+        typeof stock === "number"
+          ? Math.min(nuevaCantidadBase, stock)
+          : nuevaCantidadBase;
+      setCarrito(
+        carrito.map((item) =>
+          item.id === p.id ? { ...item, cantidad: nuevaCantidad } : item
+        )
+      );
+      return;
+    }
+
+    const cantidadFinal =
+      typeof stock === "number" ? Math.min(cantidad, stock) : cantidad;
+    if (cantidadFinal <= 0) return;
+    const nuevoItem: CartItem = { ...p, cantidad: cantidadFinal };
+    setCarrito([...carrito, nuevoItem]);
+  };
 
   const eliminarDelCarrito = (id: number) => {
     setCarrito((prev) => prev.filter((p) => p.id !== id));
@@ -38,7 +47,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const actualizarCantidad = (id: number, delta: number) => {
     setCarrito((prev) =>
       prev.map((p) =>
-        p.id === id ? { ...p, cantidad: Math.max(p.cantidad + delta, 1) } : p
+        p.id === id
+          ? (() => {
+              const stock = p.stock;
+              if (typeof stock === "number" && stock <= 0) return p;
+              const base = p.cantidad + delta;
+              const maxed =
+                typeof stock === "number" ? Math.min(base, stock) : base;
+              return { ...p, cantidad: Math.max(maxed, 1) };
+            })()
+          : p
       )
     );
   };

@@ -79,6 +79,11 @@ export default function Cart() {
               <tbody>
                 {carrito.map((p) => {
                   const cantidad = p.cantidad ?? 1;
+                  const stock = p.stock;
+                  const limiteStock =
+                    typeof stock === "number" && stock >= 0 ? stock : null;
+                  const puedeIncrementar =
+                    limiteStock === null ? true : cantidad < limiteStock;
                   return (
                     <tr key={p.id}>
                       <td>{p.nombre}</td>
@@ -88,10 +93,19 @@ export default function Cart() {
                             -
                           </button>
                           <span>{cantidad}</span>
-                          <button onClick={() => actualizarCantidad(p.id, 1)}>
+                          <button
+                            onClick={() => actualizarCantidad(p.id, 1)}
+                            disabled={!puedeIncrementar}
+                            aria-disabled={!puedeIncrementar}
+                          >
                             +
                           </button>
                         </div>
+                        {limiteStock !== null && (
+                          <span className={styles.stockInfo}>
+                            Stock disponible: {limiteStock}
+                          </span>
+                        )}
                       </td>
                       <td>${p.precio.toLocaleString()}</td>
                       <td>${(p.precio * cantidad).toLocaleString()}</td>
