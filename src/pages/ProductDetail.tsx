@@ -103,6 +103,11 @@ export default function ProductDetail() {
       },
     });
   };
+  const maxStock =
+    typeof producto.stock === "number" && producto.stock >= 0
+      ? producto.stock
+      : null;
+  const puedeIncrementar = maxStock === null ? true : cantidad < maxStock;
 
   return (
     <>
@@ -154,8 +159,14 @@ export default function ProductDetail() {
                     </button>
                     <span>{cantidad}</span>
                     <button
-                      onClick={() => setCantidad((c) => c + 1)}
+                      onClick={() =>
+                        setCantidad((c) =>
+                          maxStock === null ? c + 1 : Math.min(c + 1, maxStock)
+                        )
+                      }
                       className={styles.btnCantidad}
+                      disabled={!puedeIncrementar}
+                      aria-disabled={!puedeIncrementar}
                     >
                       +
                     </button>
@@ -244,21 +255,37 @@ export default function ProductDetail() {
                           <div className={styles.cantidadContainer}>
                             <label>Cantidad:</label>
                             <div className={styles.controles}>
-                              <button
-                                onClick={() => setCantidad((c) => Math.max(c - 1, 1))}
-                                className={styles.btnCantidad}
-                              >
-                                -
-                              </button>
-                              <span>{cantidad}</span>
-                              <button
-                                onClick={() => setCantidad((c) => c + 1)}
-                                className={styles.btnCantidad}
-                              >
-                                +
-                              </button>
-                            </div>
-                          </div>
+                      <button
+                        onClick={() => setCantidad((c) => Math.max(c - 1, 1))}
+                        className={styles.btnCantidad}
+                      >
+                        -
+                      </button>
+                      <span>{cantidad}</span>
+                      <button
+                        onClick={() =>
+                          setCantidad((c) => {
+                            const relatedMax =
+                              typeof p.stock === "number" && p.stock >= 0
+                                ? p.stock
+                                : null;
+                            return relatedMax === null
+                              ? c + 1
+                              : Math.min(c + 1, relatedMax);
+                          })
+                        }
+                        className={styles.btnCantidad}
+                        disabled={
+                          typeof p.stock === "number" && cantidad >= p.stock
+                        }
+                        aria-disabled={
+                          typeof p.stock === "number" && cantidad >= p.stock
+                        }
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
 
                           <button
                             className={styles.btnAgregar}

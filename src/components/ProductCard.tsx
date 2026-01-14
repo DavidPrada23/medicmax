@@ -41,6 +41,11 @@ export default function ProductCard({ producto }: { producto: Producto }) {
 
   const imagenProducto = producto.imagen || FALLBACK_IMAGEN;
   const agotado = producto.stock === 0;
+  const maxStock =
+    typeof producto.stock === "number" && producto.stock >= 0
+      ? producto.stock
+      : null;
+  const puedeIncrementar = maxStock === null ? true : cantidad < maxStock;
   const precioFormateado = new Intl.NumberFormat("es-CO", {
     style: "currency",
     currency: "COP",
@@ -85,7 +90,13 @@ export default function ProductCard({ producto }: { producto: Producto }) {
                 <span>{cantidad}</span>
                 <button
                   className={styles.btnCantidad}
-                  onClick={() => setCantidad((c) => c + 1)}
+                  onClick={() =>
+                    setCantidad((c) =>
+                      maxStock === null ? c + 1 : Math.min(c + 1, maxStock)
+                    )
+                  }
+                  disabled={!puedeIncrementar}
+                  aria-disabled={!puedeIncrementar}
                 >
                   +
                 </button>

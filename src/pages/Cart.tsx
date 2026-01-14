@@ -84,6 +84,8 @@ export default function Cart() {
                     typeof stock === "number" && stock >= 0 ? stock : null;
                   const puedeIncrementar =
                     limiteStock === null ? true : cantidad < limiteStock;
+                  const superaStock =
+                    limiteStock !== null && cantidad > limiteStock;
                   return (
                     <tr key={p.id}>
                       <td>{p.nombre}</td>
@@ -104,6 +106,11 @@ export default function Cart() {
                         {limiteStock !== null && (
                           <span className={styles.stockInfo}>
                             Stock disponible: {limiteStock}
+                          </span>
+                        )}
+                        {superaStock && (
+                          <span className={styles.stockWarning}>
+                            Cantidad supera el stock disponible. Ajusta antes de pagar.
                           </span>
                         )}
                       </td>
