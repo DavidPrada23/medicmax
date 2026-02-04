@@ -9,6 +9,10 @@ import Search from "../pages/SearchPage";
 import Catalogo from "../pages/CatalogoPage";
 import Ofertas from "../pages/OfertasPage";
 import Contacto from "../pages/ContactoPage";
+import LoginPage from "../pages/LoginPage";
+import ProfilePage from "../pages/ProfilePage";
+import AdminDashboardPage from "../pages/AdminDashboardPage";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 export const AppRouter = () => {
   return (
@@ -23,6 +27,15 @@ export const AppRouter = () => {
       <Route path="/catalogo" element={<Catalogo/>} />
       <Route path="/ofertas" element={<Ofertas/>} />
       <Route path="/contacto" element={<Contacto/>} />
+      <Route path="/login" element={<LoginPage />} />
+
+      <Route element={<ProtectedRoute />}>
+        <Route path="/perfil" element={<ProfilePage />} />
+      </Route>
+
+      <Route element={<ProtectedRoute requiredRole="admin" />}>
+        <Route path="/admin" element={<AdminDashboardPage />} />
+      </Route>
     </Routes>
   );
 };

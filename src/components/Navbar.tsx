@@ -6,10 +6,12 @@ import { useEffect, useState } from "react";
 import { getCategorias } from "../services/api";
 import type { Categoria } from "../types/Categoria";
 import SearchBox from "./SearchBox";
+import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
   const { totalItems } = useCart();
   const navigate = useNavigate();
+  const { isAuthenticated, user, hasRole, logout } = useAuth();
 
   const [categorias, setCategorias] = useState<Categoria[]>([]);
 
@@ -62,6 +64,25 @@ export default function Navbar() {
           <SearchBox />
         </div>
         <div className={styles.actions}>
+          {isAuthenticated ? (
+            <>
+              <Link to="/perfil" className={styles.accountLink}>
+                {user?.username || "Mi perfil"}
+              </Link>
+              {hasRole("admin") && (
+                <Link to="/admin" className={styles.accountLink}>
+                  Admin
+                </Link>
+              )}
+              <button type="button" className={styles.logoutBtn} onClick={logout}>
+                Salir
+              </button>
+            </>
+          ) : (
+            <Link to="/login" className={styles.accountLink}>
+              Ingresar
+            </Link>
+          )}
           <Link to="/cart" className={styles.cart}>
             🛒
             {totalItems > 0 && (
