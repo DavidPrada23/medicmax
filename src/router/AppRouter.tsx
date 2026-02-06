@@ -13,6 +13,7 @@ import LoginPage from "../pages/LoginPage";
 import ProfilePage from "../pages/ProfilePage";
 import AdminDashboardPage from "../pages/AdminDashboardPage";
 import ProtectedRoute from "../components/ProtectedRoute";
+import RegisterPage from "../pages/RegisterPage";
 
 export const AppRouter = () => {
   return (
@@ -28,6 +29,7 @@ export const AppRouter = () => {
       <Route path="/ofertas" element={<Ofertas/>} />
       <Route path="/contacto" element={<Contacto/>} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
 
       <Route element={<ProtectedRoute />}>
         <Route path="/perfil" element={<ProfilePage />} />

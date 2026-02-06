@@ -13,6 +13,13 @@ export interface LoginCredentials {
   password: string;
 }
 
+export interface RegisterPayload {
+  email: string;
+  username: string;
+  address: string;
+  password: string;
+}
+
 export interface UpdateProfilePayload {
   username?: string;
   address?: string;

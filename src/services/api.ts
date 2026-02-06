@@ -5,6 +5,7 @@ import type {
   AuthUser,
   LoginCredentials,
   PaidOrder,
+  RegisterPayload,
   Role,
   UpdateProfilePayload,
 } from "../types/Auth";
@@ -156,6 +157,7 @@ interface LoginResponseLike {
   address?: string;
   roles?: Array<string | ApiRoleObject>;
   id?: number | string;
+  message?: string;
 }
 
 function normalizeRole(value: string): Role | null {
@@ -210,6 +212,12 @@ async function parseJsonSafe(response: Response) {
   return response.json().catch(() => ({}));
 }
 
+function extractBackendMessage(data: unknown): string | null {
+  if (!data || typeof data !== "object") return null;
+  const maybe = data as { message?: string; error?: string };
+  return maybe.message ?? maybe.error ?? null;
+}
+
 async function fetchFirst(
   paths: string[],
   init?: RequestInit
@@ -262,6 +270,43 @@ export async function loginUser(
       email: data.email,
       username: data.username,
       address: data.address,
+      roles: data.roles,
+    },
+    token
+  );
+
+  return { token, user };
+}
+
+export async function registerUser(
+  payload: RegisterPayload
+): Promise<AuthSession | null> {
+  const response = await fetchFirst(
+    ["/auth/register", "/register", "/usuarios/registro"],
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    }
+  );
+
+  const data = (await parseJsonSafe(response)) as LoginResponseLike;
+
+  if (!response.ok) {
+    throw new Error(extractBackendMessage(data) ?? "No se pudo completar el registro");
+  }
+
+  const token = data.token ?? data.accessToken ?? data.jwt;
+  if (!token) {
+    return null;
+  }
+
+  const user = normalizeUser(
+    data.user ?? {
+      id: data.id,
+      email: data.email ?? payload.email,
+      username: data.username ?? payload.username,
+      address: data.address ?? payload.address,
       roles: data.roles,
     },
     token
@@ -368,4 +413,3 @@ export async function getPaidOrders(token: string): Promise<PaidOrder[]> {
     };
   });
 }
-

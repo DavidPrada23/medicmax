@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { useAuth } from "../context/AuthContext";
@@ -75,6 +75,10 @@ export default function LoginPage() {
               {loading ? "Ingresando..." : "Entrar"}
             </button>
           </form>
+
+          <p style={{ marginTop: "0.9rem", fontSize: "0.92rem" }}>
+            ¿No tienes cuenta? <Link to="/register">Registrate</Link>
+          </p>
         </section>
       </main>
       <Footer />

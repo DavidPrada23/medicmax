@@ -79,9 +79,14 @@ export default function Navbar() {
               </button>
             </>
           ) : (
-            <Link to="/login" className={styles.accountLink}>
-              Ingresar
-            </Link>
+            <>
+              <Link to="/login" className={styles.accountLink}>
+                Ingresar
+              </Link>
+              <Link to="/register" className={styles.accountLink}>
+                Registrarme
+              </Link>
+            </>
           )}
           <Link to="/cart" className={styles.cart}>
             🛒
